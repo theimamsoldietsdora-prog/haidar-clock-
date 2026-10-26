@@ -30,16 +30,22 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-3 md:p-6">
 
-    <!-- رأس الصفحة مع زر الأذان البارز -->
+    <!-- عنصر الصوت الحقيقي MP3 -->
+    <audio id="adhanAudio" preload="auto">
+        <source src="https://ia801500.us.archive.org/19/items/Adhan_Shia/Adhan.mp3" type="audio/mpeg">
+        متصفحك لا يدعم تشغيل الملفات الصوتية.
+    </audio>
+
+    <!-- رأس الصفحة مع زر الأذان الصوتي الحقيقي البارز -->
     <header class="text-center max-w-4xl mx-auto mb-4 space-y-2">
         <h1 class="text-3xl md:text-5xl font-bold amiri-font text-amber-400 gold-glow mb-1">الساعة الفلكية المبتكرة</h1>
         <p class="text-xs md:text-sm text-gray-300">التوقيت الزماني المتغير المستقل عن التوقيت العالمي (ساعات النهار والليل العربية)</p>
         <div class="text-xs text-amber-300 font-semibold tracking-wider">اختراع وابتكار: المهندس حيدر ال عگاب</div>
         
-        <!-- زر الأذان البارز في الأعلى -->
+        <!-- زر الأذان الصوتي الحقيقي MP3 في الأعلى -->
         <div class="pt-2">
-            <button onclick="playAdhanManually()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-5 rounded-xl text-xs md:text-sm shadow-lg transition flex items-center justify-center gap-2 mx-auto">
-                🔊 استماع إلى الأذان الشيعي للتجربة الآن
+            <button onclick="playRealAdhan()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-5 rounded-xl text-xs md:text-sm shadow-lg transition flex items-center justify-center gap-2 mx-auto">
+                🔊 استماع إلى الأذان الصوتي الحقيقي (MP3) للتجربة الآن
             </button>
         </div>
     </header>
@@ -90,7 +96,7 @@
                 <div class="flex justify-between"><span class="text-gray-400">طول ساعة الليل:</span> <span id="nightHourLength" class="font-bold text-indigo-300">-</span></div>
             </div>
 
-            <!-- لوحة مواقيت الصلاة الثلاثة المبتكرة حسب نظريتك -->
+            <!-- لوحة مواقيت الصلاة الثلاثة المبتكرة -->
             <div class="bg-amber-950/20 p-3 rounded-xl border border-amber-500/30 space-y-2 text-xs">
                 <h3 class="font-bold text-amber-300 text-center border-b border-amber-500/20 pb-1">أوقات الصلاة الثلاثة (حسب النظرية)</h3>
                 <div class="flex justify-between items-center">
@@ -102,8 +108,8 @@
                     <span class="font-bold text-indigo-300">ساعة 14 (الغسق)</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-gray-300">🌇 صلاة دلوك الشمس:</span>
-                    <span class="font-bold text-amber-400">ساعة 12 (الغروب)</span>
+                    <span class="text-gray-300">☀️ صلاة دلوك الشمس:</span>
+                    <span class="font-bold text-amber-400">ساعة 6 (الظهيرة)</span>
                 </div>
             </div>
         </section>
@@ -140,13 +146,13 @@
             { id: 3, name: "الغدوه", type: "day" },
             { id: 4, name: "الضحى", type: "day" },
             { id: 5, name: "الهاجره", type: "day" },
-            { id: 6, name: "الظهيره", type: "day" },
+            { id: 6, name: "الظهيره", type: "day", prayer: "صلاة دلوك الشمس" },
             { id: 7, name: "الرواح", type: "day" },
             { id: 8, name: "العصر", type: "day" },
             { id: 9, name: "القصر", type: "day" },
             { id: 10, name: "الأصيل", type: "day" },
             { id: 11, name: "العشي", type: "day" },
-            { id: 12, name: "الغروب", type: "day", prayer: "صلاة دلوك الشمس (إزالة الشمس)" },
+            { id: 12, name: "الغروب", type: "day" },
             { id: 13, name: "الشفق", type: "night" },
             { id: 14, name: "الغسق", type: "night", prayer: "صلاة غسق الليل" },
             { id: 15, name: "العتمه", type: "night" },
@@ -166,33 +172,15 @@
         let virtualTime = new Date();
         let lastTriggeredPrayerHour = -1;
 
-        // النص الكامل للأذان الشيعي التفاعلي
-        const adhanText = `
-            اللهُ أَكْبَر . اللهُ أَكْبَر . اللهُ أَكْبَر . اللهُ أَكْبَر .
-            أَشْهَدُ أَنْ لَا إِلٰهَ إِلَّا الله . أَشْهَدُ أَنْ لَا إِلٰهَ إِلَّا الله .
-            أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ الله . أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ الله .
-            أَشْهَدُ أَنَّ عَلِيًّا وَلِيُّ الله . أَشْهَدُ أَنَّ عَلِيًّا وَلِيُّ الله .
-            حَيَّ عَلَى الصَّلَاة . حَيَّ عَلَى الصَّلَاة .
-            حَيَّ عَلَى الْفَلَاح . حَيَّ عَلَى الْفَلَاح .
-            حَيَّ عَلَى خَيْرِ الْعَمَل . حَيَّ عَلَى خَيْرِ الْعَمَل .
-            اللهُ أَكْبَر . اللهُ أَكْبَر .
-            لَا إِلٰهَ إِلَّا الله . لَا إِلٰهَ إِلَّا الله .
-        `;
-
-        function playAdhan(prayerTitle) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const msg = new SpeechSynthesisUtterance();
-                msg.text = `حان الآن موعد ${prayerTitle} . ` + adhanText;
-                msg.lang = 'ar-SA';
-                msg.rate = 0.85;
-                msg.pitch = 1.0;
-                window.speechSynthesis.speak(msg);
+        // دالة تشغيل ملف الأذان الصوتي الحقيقي MP3
+        function playRealAdhan() {
+            const audio = document.getElementById('adhanAudio');
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(error => {
+                    console.log("التشغيل يتطلب تفاعلاً من المستخدم أولاً:", error);
+                });
             }
-        }
-
-        function playAdhanManually() {
-            playAdhan("الصلاة المباركة");
         }
 
         const gridContainer = document.getElementById('hoursGrid');
@@ -314,9 +302,10 @@
             if (currentArabicHourIndex >= 24) currentArabicHourIndex = 23;
             const activeHourObj = arabicHours[currentArabicHourIndex];
 
+            // تشغيل الأذان الصوتي تلقائياً عند حلول وقت الصلاة
             if (activeHourObj.prayer && lastTriggeredPrayerHour !== activeHourObj.id && Math.floor(progressInCurrentHour * 60) === 0 && seconds < 2) {
                 lastTriggeredPrayerHour = activeHourObj.id;
-                playAdhan(activeHourObj.prayer);
+                playRealAdhan();
             }
 
             document.getElementById('currentHourName').innerText = activeHourObj.name + (activeHourObj.prayer ? ` (${activeHourObj.prayer})` : '');
