@@ -25,9 +25,10 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-3 md:p-6">
 
-    <!-- ملف الأذان الصوتي الحقيقي بصوت الإنسان -->
+    <!-- رابط الأذان الشيعي الحقيقي المباشر الذي طلبته -->
     <audio id="adhanAudio" preload="auto">
-        <source src="https://ia801500.us.archive.org/19/items/Adhan_Shia/Adhan.mp3" type="audio/mpeg">
+        <source src="https://static.rafed.net/MP3Files/adhan/08612-adan.mp3" type="audio/mpeg">
+        متصفحك لا يدعم تشغيل الملفات الصوتية.
     </audio>
 
     <!-- رأس الصفحة -->
@@ -37,7 +38,7 @@
         <div class="text-xs text-amber-300 font-semibold tracking-wider">اختراع وابتكار: المهندس حيدر ال عگاب</div>
         <div class="pt-2">
             <button onclick="playRealAdhan()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-5 rounded-xl text-xs md:text-sm shadow-lg transition flex items-center justify-center gap-2 mx-auto">
-                🔊 استماع إلى الأذان الصوتي الحقيقي (بصوت الإنسان) للتجربة
+                🔊 استماع إلى الأذان الشيعي الحقيقي (تجربة مباشرة)
             </button>
         </div>
     </header>
@@ -45,7 +46,7 @@
     <!-- المحتوى الرئيسي -->
     <main class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        <!-- لوحة التحكم والمحاكاة ومواقيت الصلاة والشروق والغروب -->
+        <!-- لوحة التحكم والمحاكاة ومواقيت الصلاة -->
         <section class="lg:col-span-4 glass-panel p-4 md:p-5 rounded-2xl space-y-4">
             <h2 class="text-lg font-bold text-amber-300 border-b border-gray-700 pb-2">إعدادات المحاكاة والفصول</h2>
             
@@ -70,15 +71,13 @@
                 </select>
             </div>
 
-            <!-- معلومات الفصول والشروق والغروب المتجدد يومياً -->
+            <!-- معلومات الفصول والشروق والغروب المتجدد -->
             <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800 space-y-1.5 text-xs">
                 <div class="flex justify-between"><span class="text-gray-400">التوقيت الفصلي:</span> <span id="seasonName" class="font-bold text-amber-400">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">موعد الشروق المتجدد:</span> <span id="sunriseVal" class="font-bold text-amber-300">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">موعد الغروب المتجدد:</span> <span id="sunsetVal" class="font-bold text-amber-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">موعد الشروق:</span> <span id="sunriseVal" class="font-bold text-amber-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">موعد الغروب:</span> <span id="sunsetVal" class="font-bold text-amber-300">-</span></div>
                 <div class="flex justify-between"><span class="text-gray-400">ساعات النهار:</span> <span id="dayHoursVal" class="font-bold text-white">-</span></div>
                 <div class="flex justify-between"><span class="text-gray-400">ساعات الليل:</span> <span id="nightHoursVal" class="font-bold text-white">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">طول ساعة النهار:</span> <span id="dayHourLength" class="font-bold text-emerald-300">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">طول ساعة الليل:</span> <span id="nightHourLength" class="font-bold text-indigo-300">-</span></div>
             </div>
 
             <!-- أوقات الصلاة الثلاثة المبتكرة -->
@@ -110,7 +109,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs" id="hoursGrid"></div>
     </footer>
 
-    <!-- البرمجة والخوارزميات الفلكية الدقيقة -->
+    <!-- البرمجة والخوارزميات -->
     <script>
         const arabicHours = [
             { id: 1, name: "الشروق", type: "day" }, { id: 2, name: "البكور", type: "day" },
@@ -136,7 +135,7 @@
             const audio = document.getElementById('adhanAudio');
             if (audio) {
                 audio.currentTime = 0;
-                audio.play().catch(e => console.log("يتطلب تفاعلاً لتشغيل الصوت:", e));
+                audio.play().catch(e => console.log("يتطلب تفاعلاً لتشغيل الصوت في الآيفون:", e));
             }
         }
 
@@ -171,23 +170,13 @@
             virtualTime = new Date(document.getElementById('simDateInput').value + "T06:00:00");
         }
 
-        // خوارزمية فلكية دقيقة لحساب الفصول، ساعات النهار/الليل، وموعد الشروق والغروب المتجدد طوال أيام السنة
         function getAstronomicalParameters(date) {
             const startOfYear = new Date(date.getFullYear(), 0, 1);
             const dayOfYear = Math.floor((date - startOfYear) / (1000 * 60 * 60 * 24));
             const angle = (2 * Math.PI * (dayOfYear - 80)) / 365;
             const seasonalFactor = Math.cos(angle); 
-
-            let dayHours = 12 + 2 * seasonalFactor; // تتراوح بين 10 (شتاء) و 14 (صيف)
+            let dayHours = 12 + 2 * seasonalFactor;
             let nightHours = 24 - dayHours;
-
-            let dayHourMinutes = (dayHours / 12) * 60; 
-            let nightHourMinutes = (nightHours / 12) * 60; 
-
-            // حساب دقيق متجدد لوقت الشروق والغروب طوال السنة
-            // افتراض الشروق الأساسي الساعة 06:00 صباحاً ويتغير بحسب الانحراف الفصلي
-            let sunriseHour = 6 - (seasonalFactor * 1); // يتأخر ويتقدم فصلياً
-            let sunsetHour = sunriseHour + dayHours;
 
             let formatTime = (decimalHours) => {
                 let h = Math.floor(decimalHours);
@@ -197,21 +186,12 @@
                 return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
             };
 
-            let seasonName = "اعتدال ربيعي / خريفي";
-            if (seasonalFactor > 0.5) seasonName = "ذروة فصل الصيف (نهار طويل)";
-            else if (seasonalFactor < -0.5) seasonName = "ذروة فصل الشتاء (ليل طويل)";
-            else if (seasonalFactor > 0) seasonName = "فصل الربيع / الصيف التدريجي";
-            else seasonName = "فصل الخريف / الشتاء التدريجي";
-
             return {
                 dayHours: dayHours.toFixed(1),
                 nightHours: nightHours.toFixed(1),
-                dayHourMinutes: dayHourMinutes.toFixed(1),
-                nightHourMinutes: nightHourMinutes.toFixed(1),
                 sunriseStr: formatTime(6 - (seasonalFactor * 0.8)),
                 sunsetStr: formatTime(18 + (seasonalFactor * 0.8)),
-                seasonName: seasonName,
-                seasonalFactor: seasonalFactor
+                seasonName: seasonalFactor > 0.5 ? "ذروة الصيف" : (seasonalFactor < -0.5 ? "ذروة الشتاء" : "اعتدال انتقالي")
             };
         }
 
@@ -235,13 +215,10 @@
             document.getElementById('sunsetVal').innerText = astro.sunsetStr;
             document.getElementById('dayHoursVal').innerText = `${astro.dayHours} ساعة`;
             document.getElementById('nightHoursVal').innerText = `${astro.nightHours} ساعة`;
-            document.getElementById('dayHourLength').innerText = `${astro.dayHourMinutes} دقيقة`;
-            document.getElementById('nightHourLength').innerText = `${astro.nightHourMinutes} دقيقة`;
 
             const hours = now.getHours(), minutes = now.getMinutes(), seconds = now.getSeconds();
             const totalSecs = ((hours - 6) * 3600 + minutes * 60 + seconds + 86400) % 86400;
             const totalDaySecs = parseFloat(astro.dayHours) * 3600;
-            const totalNightSecs = 86400 - totalDaySecs;
 
             let curIndex = 0, prog = 0, isDaytime = true;
             if (totalSecs < totalDaySecs) {
@@ -251,7 +228,7 @@
                 prog = (totalSecs % secH) / secH;
             } else {
                 isDaytime = false;
-                const secN = totalNightSecs / 12;
+                const secN = (86400 - totalDaySecs) / 12;
                 curIndex = 12 + Math.floor((totalSecs - totalDaySecs) / secN);
                 prog = ((totalSecs - totalDaySecs) % secN) / secN;
             }
@@ -259,7 +236,6 @@
             if (curIndex >= 24) curIndex = 23;
             const activeH = arabicHours[curIndex];
 
-            // تفعيل الأذان الصوتي الحقيقي تلقائياً عند حلول وقت الصلاة
             if (activeH.prayer && lastTriggeredPrayerHour !== activeH.id && Math.floor(prog * 60) === 0 && seconds < 2) {
                 lastTriggeredPrayerHour = activeH.id;
                 playRealAdhan();
@@ -267,8 +243,6 @@
 
             document.getElementById('currentHourName').innerText = activeH.name + (activeH.prayer ? ` (${activeH.prayer})` : '');
             document.getElementById('currentDetailedTime').innerText = `الساعة ${activeH.id} | الدقيقة ${Math.floor(prog * 60)} | الثانية ${seconds}`;
-            document.getElementById('periodIndicator').innerText = isDaytime ? "فترة النهار العربي" : "فترة الليل العربي";
-            document.getElementById('periodIndicator').className = isDaytime ? "text-[11px] px-3 py-0.5 bg-amber-500/20 text-amber-300 rounded-full inline-block mt-1" : "text-[11px] px-3 py-0.5 bg-indigo-500/20 text-indigo-300 rounded-full inline-block mt-1";
 
             document.querySelectorAll('[id^="hour-card-"]').forEach(el => el.classList.remove('ring-2', 'ring-amber-400', 'bg-amber-900/60'));
             const activeCard = document.getElementById(`hour-card-${activeH.id}`);
@@ -277,7 +251,6 @@
             ctx.save();
             ctx.translate(radius, radius);
 
-            // الإطار الدائري
             ctx.beginPath();
             ctx.arc(0, 0, radius - 15, 0, 2 * Math.PI);
             const bgGrad = ctx.createRadialGradient(0, 0, 50, 0, 0, radius);
@@ -285,21 +258,11 @@
             ctx.fillStyle = bgGrad; ctx.fill();
             ctx.lineWidth = 5; ctx.strokeStyle = '#f59e0b'; ctx.stroke();
 
-            // التوهج المركزي واسم المخترع
-            const centerGlow = ctx.createRadialGradient(0, 0, 5, 0, 0, 110);
-            centerGlow.addColorStop(0, 'rgba(251, 191, 36, 0.35)');
-            centerGlow.addColorStop(0.5, 'rgba(56, 189, 248, 0.15)');
-            centerGlow.addColorStop(1, 'transparent');
-            ctx.fillStyle = centerGlow; ctx.beginPath(); ctx.arc(0, 0, 110, 0, 2 * Math.PI); ctx.fill();
-
             ctx.font = 'bold 12px "Cairo", sans-serif'; ctx.fillStyle = '#facc15'; ctx.textAlign = 'center';
             ctx.fillText("ابتكار واختراع", 0, -22);
             ctx.font = 'bold 14px "Amiri", serif'; ctx.fillStyle = '#ffffff';
             ctx.fillText("المهندس حيدر ال عگاب", 0, 2);
-            ctx.font = '9px "Cairo", sans-serif'; ctx.fillStyle = '#94a3b8';
-            ctx.fillText("الساعة الفلكية المبتكرة", 0, 22);
 
-            // الساعات والترقيم الخارجي الـ 24
             const step = (2 * Math.PI) / 24;
             for (let i = 0; i < 24; i++) {
                 const angle = i * step - Math.PI / 2;
@@ -307,8 +270,7 @@
                 ctx.save();
                 ctx.rotate(angle);
                 ctx.beginPath(); ctx.moveTo(radius - 65, 0); ctx.lineTo(radius - 20, 0);
-                ctx.strokeStyle = h.prayer ? '#10b981' : (h.type === 'day' ? 'rgba(245, 158, 11, 0.4)' : 'rgba(99, 102, 241, 0.4)');
-                ctx.lineWidth = h.prayer ? 3 : 1.5; ctx.stroke();
+                ctx.strokeStyle = h.prayer ? '#10b981' : 'rgba(245, 158, 11, 0.4)'; ctx.lineWidth = h.prayer ? 3 : 1.5; ctx.stroke();
                 
                 ctx.rotate(Math.PI / 2);
                 ctx.font = 'bold 11px "Cairo", sans-serif';
@@ -319,18 +281,10 @@
                 ctx.restore();
             }
 
-            // العقارب الفلكية
             const hAngle = ((curIndex + prog) * step) - Math.PI / 2;
             ctx.save();
             ctx.rotate(hAngle);
             ctx.beginPath(); ctx.moveTo(0, 15); ctx.lineTo(0, -(radius - 125)); ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.stroke();
-            ctx.restore();
-
-            const minProg = (prog * 60) % 60 / 60;
-            const minAngle = (minProg * 2 * Math.PI) - Math.PI / 2;
-            ctx.save();
-            ctx.rotate(minAngle);
-            ctx.beginPath(); ctx.moveTo(0, 20); ctx.lineTo(0, -(radius - 95)); ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.stroke();
             ctx.restore();
 
             ctx.beginPath(); ctx.arc(0, 0, 5, 0, 2 * Math.PI); ctx.fillStyle = '#f3f4f6'; ctx.fill();
