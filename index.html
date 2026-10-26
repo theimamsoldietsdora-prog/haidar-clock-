@@ -25,26 +25,32 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-3 md:p-6">
 
-    <!-- الملفات الصوتية الحقيقية المضمنة -->
-    <audio id="adhanAudio" preload="auto">
-        <source src="https://ia903108.us.archive.org/28/items/Adhan_202303/Adhan.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="quranAudio" preload="auto">
-        <source src="https://ia800902.us.archive.org/11/items/SurahAnNasr_201506/Nasr.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="istighfarAudio" preload="auto">
-        <source src="https://ia801500.us.archive.org/24/items/Istighfar_Interactive/Istighfar.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- رأس الصفحة -->
-    <header class="text-center max-w-4xl mx-auto mb-4 space-y-2">
+    <!-- رأس الصفحة مع مشغلات الصوت المرئية للآيفون لتجاوز حظر المتصفح -->
+    <header class="text-center max-w-4xl mx-auto mb-4 space-y-3">
         <h1 class="text-3xl md:text-5xl font-bold amiri-font text-amber-400 gold-glow mb-1">الساعة الفلكية المبتكرة</h1>
         <p class="text-xs md:text-sm text-gray-300">التوقيت الزماني المتغير المستقل عن التوقيت العالمي (ساعات النهار والليل العربية)</p>
         <div class="text-xs text-amber-300 font-semibold tracking-wider">اختراع وابتكار: المهندس حيدر ال عگاب</div>
-        <div class="pt-2 flex flex-wrap justify-center gap-2">
-            <button onclick="playAudioSafe('adhanAudio')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">🔊 تجربة الأذان الحقيقي</button>
-            <button onclick="playAudioSafe('quranAudio')" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📖 تجربة سورة النصر</button>
-            <button onclick="playAudioSafe('istighfarAudio')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📿 تجربة الاستغفار</button>
+        
+        <!-- مشغلات صوت مرئية حقيقية لضمان عملها 100% في سفاري الآيفون -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 pt-2 bg-slate-900/90 p-3 rounded-2xl border border-amber-500/30 text-xs">
+            <div class="flex flex-col items-center space-y-1">
+                <span class="text-emerald-400 font-bold">🔊 الأذان الحقيقي[span_3](start_span)[span_3](end_span)</span>
+                <audio controls preload="auto" class="w-full h-8" id="adhanAudio">
+                    <source src="https://ia903108.us.archive.org/28/items/Adhan_202303/Adhan.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            <div class="flex flex-col items-center space-y-1">
+                <span class="text-amber-300 font-bold">📖 تلاوة سورة النصر[span_4](start_span)[span_4](end_span)</span>
+                <audio controls preload="auto" class="w-full h-8" id="quranAudio">
+                    <source src="https://ia800902.us.archive.org/11/items/SurahAnNasr_201506/Nasr.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            <div class="flex flex-col items-center space-y-1">
+                <span class="text-indigo-300 font-bold">📿 دعاء الاستغفار[span_5](start_span)[span_5](end_span)</span>
+                <audio controls preload="auto" class="w-full h-8" id="istighfarAudio">
+                    <source src="https://ia801500.us.archive.org/24/items/Istighfar_Interactive/Istighfar.mp3" type="audio/mpeg">
+                </audio>
+            </div>
         </div>
     </header>
 
@@ -119,7 +125,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs" id="hoursGrid"></div>
     </footer>
 
-    <!-- البرمجة والخوارزميات الصوتية المتقدمة -->
+    <!-- البرمجة والخوارزميات -->
     <script>
         const arabicHours = [
             { id: 1, name: "الشروق", type: "day" }, { id: 2, name: "البكور", type: "day" },
@@ -141,12 +147,12 @@
         let virtualTime = new Date();
         let lastTriggeredEvent = "";
 
-        function playAudioSafe(audioId) {
+        function playAudio(audioId) {
             const audio = document.getElementById(audioId);
             if (audio) {
                 audio.currentTime = 0;
                 audio.play().catch(e => {
-                    console.log("تطلب تشغيل الصوت تفاعلاً إضافياً من المتصفح:", e);
+                    console.log("متطلبات الأمان في الآيفون تتطلب تفاعلاً مع مشغل الصوت:", e);
                 });
             }
         }
@@ -256,20 +262,20 @@
             if (curIndex >= 24) curIndex = 23;
             const activeH = arabicHours[curIndex];
 
-            // التزامن التلقائي وانطلاق الصوت البشري الحقيقي عند حلول الموعد بدقة
+            // التشغيل التلقائي عند حلول الأوقات الدقيقة
             let currentMinute = Math.floor(prog * 60);
             let eventKey = `${activeH.id}-${currentMinute}`;
             if (seconds < 2 && lastTriggeredEvent !== eventKey) {
                 if (activeH.audio && currentMinute === 0) {
                     lastTriggeredEvent = eventKey;
-                    playAudioSafe(activeH.audio);
+                    playAudio(activeH.audio);
                 } else if (activeH.special) {
                     if (currentMinute === 0) {
                         lastTriggeredEvent = eventKey;
-                        playAudioSafe('quranAudio');
+                        playAudio('quranAudio');
                     } else if (currentMinute === 30) {
                         lastTriggeredEvent = eventKey;
-                        playAudioSafe('istighfarAudio');
+                        playAudio('istighfarAudio');
                     }
                 }
             }
