@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ساعة حيدر آل عگاب الفلكية</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#022c22">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap');
+        body { font-family: 'Tajawal', sans-serif; }
+        .amiri-font { font-family: 'Amiri', serif; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-between p-4 relative overflow-x-hidden">
+
+    <div class="absolute inset-0 z-0 opacity-40 pointer-events-none bg-cover bg-center" style="background-image: radial-gradient(circle at center, rgba(16, 185, 129, 0.2) 0%, rgba(2, 44, 34, 0.9) 70%), linear-gradient(to bottom, #022c22, #09090b);"></div>
+
+    <header class="relative z-10 text-center my-4">
+        <h1 class="amiri-font text-3xl md:text-4xl font-bold text-amber-400 drop-shadow-lg">ساعة حيدر آل عگاب الفلكية</h1>
+        <p class="text-xs md:text-sm text-emerald-300 mt-1">نظام التوقيت العكابي المتغير (ساعات النهار والليل الحيوية)</p>
+    </header>
+
+    <main class="relative z-10 flex flex-col items-center justify-center my-auto w-full max-w-md">
+        <div class="relative w-72 h-72 md:w-80 md:h-80 rounded-full border-4 border-amber-500/50 bg-slate-900/85 shadow-2xl backdrop-blur-md flex items-center justify-center p-4">
+            <div id="clock-face" class="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                <span id="current-hour-name" class="amiri-font text-2xl font-bold text-amber-300 block mb-2">الشروق</span>
+                <span id="current-time-display" class="text-2xl font-mono text-emerald-400 block mb-1">00:00:00</span>
+                <span id="current-hour-length" class="text-xs text-slate-300 block">مقدار الساعة: 60 دقيقة</span>
+            </div>
+        </div>
+
+        <div class="mt-6 bg-slate-900/90 border border-emerald-500/30 rounded-xl p-4 w-full text-sm shadow-inner">
+            <div class="flex justify-between py-1 border-b border-slate-800">
+                <span class="text-slate-400">الفصل الفلكي:</span>
+                <span id="season-display" class="font-bold text-amber-400">الاعتدال الربيعي/الخريفي</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-800">
+                <span class="text-slate-400">حالة النهار:</span>
+                <span id="day-length-info" class="font-bold text-emerald-300">12 ساعة نهار / 12 ساعة ليل</span>
+            </div>
+            <div class="flex justify-between py-1">
+                <span class="text-slate-400">المهندس والمخترع:</span>
+                <span class="font-bold text-amber-300">حيدر آل عگاب</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="relative z-10 text-center mt-4 text-xs text-slate-500">
+        <p>جميع الحقوق محفوظة للمخترع © حيدر آل عگاب</p>
+    </footer>
+
+    <script>
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('current-time-display').innerText = now.toLocaleTimeString('en-US', { hour12: false });
+        }, 1000);
+    </script>
+</body>
+</html>
