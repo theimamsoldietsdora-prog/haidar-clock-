@@ -25,7 +25,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-3 md:p-6">
 
-    <!-- الملفات الصوتية -->
+    <!-- روابط الصوت المباشرة -->
     <audio id="adhanAudio" preload="auto">
         <source src="https://static.rafed.net/MP3Files/adhan/08612-adan.mp3" type="audio/mpeg">
     </audio>
@@ -42,9 +42,9 @@
         <p class="text-xs md:text-sm text-gray-300">التوقيت الزماني المتغير المستقل عن التوقيت العالمي (ساعات النهار والليل العربية)</p>
         <div class="text-xs text-amber-300 font-semibold tracking-wider">اختراع وابتكار: المهندس حيدر ال عگاب</div>
         <div class="pt-2 flex flex-wrap justify-center gap-2">
-            <button onclick="playAudioDirect('adhanAudio')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">🔊 تجربة الأذان</button>
-            <button onclick="playAudioDirect('quranAudio')" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📖 تجربة سورة النصر</button>
-            <button onclick="playAudioDirect('istighfarAudio')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📿 تجربة الاستغفار</button>
+            <button onclick="unlockAudioAndPlay('adhanAudio')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">🔊 تفعيل وتشغيل الأذان</button>
+            <button onclick="unlockAudioAndPlay('quranAudio')" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📖 تفعيل وتشغيل سورة النصر</button>
+            <button onclick="unlockAudioAndPlay('istighfarAudio')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📿 تفعيل وتشغيل الاستغفار</button>
         </div>
     </header>
 
@@ -140,12 +140,19 @@
         let simDate = new Date();
         let virtualTime = new Date();
         let lastTriggeredEvent = "";
+        let audioUnlocked = false;
 
-        function playAudioDirect(audioId) {
+        function unlockAudioAndPlay(audioId) {
             const audio = document.getElementById(audioId);
             if (audio) {
+                audio.muted = false;
                 audio.currentTime = 0;
-                audio.play().catch(e => console.log("تفاعل المستخدم مطلوب:", e));
+                audio.play().then(() => {
+                    audioUnlocked = true;
+                    console.log("تم تفعيل الصوت بنجاح بواسطة المستخدم");
+                }).catch(e => {
+                    console.log("خطأ في تشغيل الصوت:", e);
+                });
             }
         }
 
@@ -254,20 +261,20 @@
             if (curIndex >= 24) curIndex = 23;
             const activeH = arabicHours[curIndex];
 
-            // التزامن التلقائي للصلاة والمناسبات عند بدايتها بدقة
+            // التزامن التلقائي وانطلاق الصوت عند حلول الموعد بدقة
             let currentMinute = Math.floor(prog * 60);
             let eventKey = `${activeH.id}-${currentMinute}`;
             if (seconds < 2 && lastTriggeredEvent !== eventKey) {
                 if (activeH.audio && currentMinute === 0) {
                     lastTriggeredEvent = eventKey;
-                    playAudioDirect(activeH.audio);
+                    unlockAudioAndPlay(activeH.audio);
                 } else if (activeH.special) {
                     if (currentMinute === 0) {
                         lastTriggeredEvent = eventKey;
-                        playAudioDirect('quranAudio');
+                        unlockAudioAndPlay('quranAudio');
                     } else if (currentMinute === 30) {
                         lastTriggeredEvent = eventKey;
-                        playAudioDirect('istighfarAudio');
+                        unlockAudioAndPlay('istighfarAudio');
                     }
                 }
             }
@@ -326,7 +333,7 @@
             ctx.save();
             ctx.rotate(minAngle);
             ctx.beginPath(); ctx.moveTo(0, 20); ctx.lineTo(0, -(radius - 100));
-            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3.5; ctx.lineCap = 'round'; ctx.stroke();
+            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3.5; ctx.lineCap, 'round'; ctx.stroke();
             ctx.restore();
 
             const secAngle = ((seconds / 60) * 2 * Math.PI) - Math.PI / 2;
