@@ -25,10 +25,15 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-3 md:p-6">
 
-    <!-- رابط الأذان الشيعي الحقيقي المباشر الذي طلبته -->
+    <!-- ملفات الصوت الحقيقية -->
     <audio id="adhanAudio" preload="auto">
         <source src="https://static.rafed.net/MP3Files/adhan/08612-adan.mp3" type="audio/mpeg">
-        متصفحك لا يدعم تشغيل الملفات الصوتية.
+    </audio>
+    <audio id="quranAudio" preload="auto">
+        <source src="https://ia801500.us.archive.org/15/items/Quran_Nasr/Nasr.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="istighfarAudio" preload="auto">
+        <source src="https://ia801500.us.archive.org/24/items/Istighfar_Interactive/Istighfar.mp3" type="audio/mpeg">
     </audio>
 
     <!-- رأس الصفحة -->
@@ -36,17 +41,17 @@
         <h1 class="text-3xl md:text-5xl font-bold amiri-font text-amber-400 gold-glow mb-1">الساعة الفلكية المبتكرة</h1>
         <p class="text-xs md:text-sm text-gray-300">التوقيت الزماني المتغير المستقل عن التوقيت العالمي (ساعات النهار والليل العربية)</p>
         <div class="text-xs text-amber-300 font-semibold tracking-wider">اختراع وابتكار: المهندس حيدر ال عگاب</div>
-        <div class="pt-2">
-            <button onclick="playRealAdhan()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-5 rounded-xl text-xs md:text-sm shadow-lg transition flex items-center justify-center gap-2 mx-auto">
-                🔊 استماع إلى الأذان الشيعي الحقيقي (تجربة مباشرة)
-            </button>
+        <div class="pt-2 flex flex-wrap justify-center gap-2">
+            <button onclick="playAudio('adhanAudio')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">🔊 تجربة الأذان</button>
+            <button onclick="playAudio('quranAudio')" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📖 تجربة سورة النصر</button>
+            <button onclick="playAudio('istighfarAudio')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📿 تجربة الاستغفار</button>
         </div>
     </header>
 
     <!-- المحتوى الرئيسي -->
     <main class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        <!-- لوحة التحكم والمحاكاة ومواقيت الصلاة -->
+        <!-- لوحة التحكم والمحاكاة -->
         <section class="lg:col-span-4 glass-panel p-4 md:p-5 rounded-2xl space-y-4">
             <h2 class="text-lg font-bold text-amber-300 border-b border-gray-700 pb-2">إعدادات المحاكاة والفصول</h2>
             
@@ -71,21 +76,26 @@
                 </select>
             </div>
 
-            <!-- معلومات الفصول والشروق والغروب المتجدد -->
+            <!-- معلومات الفصول والشروق والغروب الآلي -->
             <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800 space-y-1.5 text-xs">
                 <div class="flex justify-between"><span class="text-gray-400">التوقيت الفصلي:</span> <span id="seasonName" class="font-bold text-amber-400">-</span></div>
                 <div class="flex justify-between"><span class="text-gray-400">موعد الشروق:</span> <span id="sunriseVal" class="font-bold text-amber-300">-</span></div>
                 <div class="flex justify-between"><span class="text-gray-400">موعد الغروب:</span> <span id="sunsetVal" class="font-bold text-amber-300">-</span></div>
                 <div class="flex justify-between"><span class="text-gray-400">ساعات النهار:</span> <span id="dayHoursVal" class="font-bold text-white">-</span></div>
                 <div class="flex justify-between"><span class="text-gray-400">ساعات الليل:</span> <span id="nightHoursVal" class="font-bold text-white">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">طول ساعة النهار:</span> <span id="dayHourLength" class="font-bold text-emerald-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">طول ساعة الليل:</span> <span id="nightHourLength" class="font-bold text-indigo-300">-</span></div>
             </div>
 
-            <!-- أوقات الصلاة الثلاثة المبتكرة -->
+            <!-- أوقات الصلاة والمناسبات الروحية -->
             <div class="bg-amber-950/20 p-3 rounded-xl border border-amber-500/30 space-y-2 text-xs">
-                <h3 class="font-bold text-amber-300 text-center border-b border-amber-500/20 pb-1">مواقيت الصلاة الثلاثة</h3>
+                <h3 class="font-bold text-amber-300 text-center border-b border-amber-500/20 pb-1">مواقيت الصلاة والمناسبات الروحية</h3>
                 <div class="flex justify-between items-center"><span class="text-gray-300">🌅 صلاة قرآن الفجر:</span> <span class="font-bold text-emerald-300">ساعة 22</span></div>
                 <div class="flex justify-between items-center"><span class="text-gray-300">🌙 صلاة غسق الليل:</span> <span class="font-bold text-indigo-300">ساعة 14</span></div>
                 <div class="flex justify-between items-center"><span class="text-gray-300">☀️ صلاة دلوك الشمس:</span> <span class="font-bold text-amber-400">ساعة 6 (الظهيرة)</span></div>
+                <div class="flex justify-between items-center"><span class="text-gray-300">🌌 صلاة الليل:</span> <span class="font-bold text-purple-300">ساعة 20 (البهره)</span></div>
+                <div class="flex justify-between items-center"><span class="text-gray-300">📖 قراءة سورة النصر:</span> <span class="font-bold text-amber-200">ساعة 21 (بدء السحر)</span></div>
+                <div class="flex justify-between items-center"><span class="text-gray-300">📿 ساعة الاستغفار:</span> <span class="font-bold text-blue-300">ساعة 21 (منتصف السحر)</span></div>
             </div>
         </section>
 
@@ -109,33 +119,33 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs" id="hoursGrid"></div>
     </footer>
 
-    <!-- البرمجة والخوارزميات -->
+    <!-- البرمجة والخوارزميات الدقيقة -->
     <script>
         const arabicHours = [
             { id: 1, name: "الشروق", type: "day" }, { id: 2, name: "البكور", type: "day" },
             { id: 3, name: "الغدوه", type: "day" }, { id: 4, name: "الضحى", type: "day" },
-            { id: 5, name: "الهاجره", type: "day" }, { id: 6, name: "الظهيره", type: "day", prayer: "صلاة دلوك الشمس" },
+            { id: 5, name: "الهاجره", type: "day" }, { id: 6, name: "الظهيره", type: "day", prayer: "صلاة دلوك الشمس", audio: "adhanAudio" },
             { id: 7, name: "الرواح", type: "day" }, { id: 8, name: "العصر", type: "day" },
             { id: 9, name: "القصر", type: "day" }, { id: 10, name: "الأصيل", type: "day" },
             { id: 11, name: "العشي", type: "day" }, { id: 12, name: "الغروب", type: "day" },
-            { id: 13, name: "الشفق", type: "night" }, { id: 14, name: "الغسق", type: "night", prayer: "صلاة غسق الليل" },
+            { id: 13, name: "الشفق", type: "night" }, { id: 14, name: "الغسق", type: "night", prayer: "صلاة غسق الليل", audio: "adhanAudio" },
             { id: 15, name: "العتمه", type: "night" }, { id: 16, name: "السدفة", type: "night" },
             { id: 17, name: "الفحمة", type: "night" }, { id: 18, name: "الزلة", type: "night" },
-            { id: 19, name: "الزلفى", type: "night" }, { id: 20, name: "البهره", type: "night" },
-            { id: 21, name: "السحر", type: "night" }, { id: 22, name: "الفجر", type: "night", prayer: "صلاة قرآن الفجر" },
+            { id: 19, name: "الزلفى", type: "night" }, { id: 20, name: "البهره", type: "night", prayer: "صلاة الليل", audio: "adhanAudio" },
+            { id: 21, name: "السحر", type: "night", special: "سورة النصر + الاستغفار" }, { id: 22, name: "الفجر", type: "night", prayer: "صلاة قرآن الفجر", audio: "adhanAudio" },
             { id: 23, name: "الصبح", type: "night" }, { id: 24, name: "الصباح", type: "night" }
         ];
 
         let isSimulation = false;
         let simDate = new Date();
         let virtualTime = new Date();
-        let lastTriggeredPrayerHour = -1;
+        let lastTriggeredEvent = "";
 
-        function playRealAdhan() {
-            const audio = document.getElementById('adhanAudio');
+        function playAudio(audioId) {
+            const audio = document.getElementById(audioId);
             if (audio) {
                 audio.currentTime = 0;
-                audio.play().catch(e => console.log("يتطلب تفاعلاً لتشغيل الصوت في الآيفون:", e));
+                audio.play().catch(e => console.log("تفاعل المستخدم مطلوب في المتصفح:", e));
             }
         }
 
@@ -144,7 +154,7 @@
             const div = document.createElement('div');
             div.id = `hour-card-${h.id}`;
             div.className = `p-2 rounded-lg border text-center transition ${h.type === 'day' ? 'bg-amber-950/30 border-amber-500/30 text-amber-200' : 'bg-indigo-950/30 border-indigo-500/30 text-indigo-200'}`;
-            div.innerHTML = `<span class="block text-[9px] text-gray-400">ساعة ${h.id} ${h.prayer ? '🕌' : ''}</span><strong class="text-xs">${h.name}</strong>`;
+            div.innerHTML = `<span class="block text-[9px] text-gray-400">ساعة ${h.id} ${h.prayer || h.special ? '🕌' : ''}</span><strong class="text-xs">${h.name}</strong>`;
             gridContainer.appendChild(div);
         });
 
@@ -178,6 +188,9 @@
             let dayHours = 12 + 2 * seasonalFactor;
             let nightHours = 24 - dayHours;
 
+            let dayHourMinutes = (dayHours / 12) * 60;
+            let nightHourMinutes = (nightHours / 12) * 60;
+
             let formatTime = (decimalHours) => {
                 let h = Math.floor(decimalHours);
                 let m = Math.floor((decimalHours - h) * 60);
@@ -189,6 +202,8 @@
             return {
                 dayHours: dayHours.toFixed(1),
                 nightHours: nightHours.toFixed(1),
+                dayHourMinutes: dayHourMinutes.toFixed(1),
+                nightHourMinutes: nightHourMinutes.toFixed(1),
                 sunriseStr: formatTime(6 - (seasonalFactor * 0.8)),
                 sunsetStr: formatTime(18 + (seasonalFactor * 0.8)),
                 seasonName: seasonalFactor > 0.5 ? "ذروة الصيف" : (seasonalFactor < -0.5 ? "ذروة الشتاء" : "اعتدال انتقالي")
@@ -215,10 +230,13 @@
             document.getElementById('sunsetVal').innerText = astro.sunsetStr;
             document.getElementById('dayHoursVal').innerText = `${astro.dayHours} ساعة`;
             document.getElementById('nightHoursVal').innerText = `${astro.nightHours} ساعة`;
+            document.getElementById('dayHourLength').innerText = `${astro.dayHourMinutes} دقيقة`;
+            document.getElementById('nightHourLength').innerText = `${astro.nightHourMinutes} دقيقة`;
 
             const hours = now.getHours(), minutes = now.getMinutes(), seconds = now.getSeconds();
             const totalSecs = ((hours - 6) * 3600 + minutes * 60 + seconds + 86400) % 86400;
             const totalDaySecs = parseFloat(astro.dayHours) * 3600;
+            const totalNightSecs = 86400 - totalDaySecs;
 
             let curIndex = 0, prog = 0, isDaytime = true;
             if (totalSecs < totalDaySecs) {
@@ -228,7 +246,7 @@
                 prog = (totalSecs % secH) / secH;
             } else {
                 isDaytime = false;
-                const secN = (86400 - totalDaySecs) / 12;
+                const secN = totalNightSecs / 12;
                 curIndex = 12 + Math.floor((totalSecs - totalDaySecs) / secN);
                 prog = ((totalSecs - totalDaySecs) % secN) / secN;
             }
@@ -236,13 +254,26 @@
             if (curIndex >= 24) curIndex = 23;
             const activeH = arabicHours[curIndex];
 
-            if (activeH.prayer && lastTriggeredPrayerHour !== activeH.id && Math.floor(prog * 60) === 0 && seconds < 2) {
-                lastTriggeredPrayerHour = activeH.id;
-                playRealAdhan();
+            // التنبيهات الصوتية للتطابق التلقائي
+            let eventKey = `${activeH.id}-${Math.floor(prog * 60)}`;
+            if (seconds < 2 && lastTriggeredEvent !== eventKey) {
+                if (activeH.audio && Math.floor(prog * 60) === 0) {
+                    lastTriggeredEvent = eventKey;
+                    playAudio(activeH.audio);
+                } else if (activeH.special) {
+                    if (Math.floor(prog * 60) === 0) {
+                        lastTriggeredEvent = eventKey;
+                        playAudio('quranAudio');
+                    } else if (Math.floor(prog * 60) === 30) {
+                        lastTriggeredEvent = eventKey;
+                        playAudio('istighfarAudio');
+                    }
+                }
             }
 
-            document.getElementById('currentHourName').innerText = activeH.name + (activeH.prayer ? ` (${activeH.prayer})` : '');
+            document.getElementById('currentHourName').innerText = activeH.name + (activeH.prayer ? ` (${activeH.prayer})` : (activeH.special ? ` (${activeH.special})` : ''));
             document.getElementById('currentDetailedTime').innerText = `الساعة ${activeH.id} | الدقيقة ${Math.floor(prog * 60)} | الثانية ${seconds}`;
+            document.getElementById('periodIndicator').innerText = isDaytime ? "فترة النهار العربي" : "فترة الليل العربي";
 
             document.querySelectorAll('[id^="hour-card-"]').forEach(el => el.classList.remove('ring-2', 'ring-amber-400', 'bg-amber-900/60'));
             const activeCard = document.getElementById(`hour-card-${activeH.id}`);
@@ -251,6 +282,7 @@
             ctx.save();
             ctx.translate(radius, radius);
 
+            // 1. الإطار الخلفي للساعة
             ctx.beginPath();
             ctx.arc(0, 0, radius - 15, 0, 2 * Math.PI);
             const bgGrad = ctx.createRadialGradient(0, 0, 50, 0, 0, radius);
@@ -258,11 +290,13 @@
             ctx.fillStyle = bgGrad; ctx.fill();
             ctx.lineWidth = 5; ctx.strokeStyle = '#f59e0b'; ctx.stroke();
 
+            // 2. توهج المركز واسم المهندس حيدر
             ctx.font = 'bold 12px "Cairo", sans-serif'; ctx.fillStyle = '#facc15'; ctx.textAlign = 'center';
             ctx.fillText("ابتكار واختراع", 0, -22);
             ctx.font = 'bold 14px "Amiri", serif'; ctx.fillStyle = '#ffffff';
             ctx.fillText("المهندس حيدر ال عگاب", 0, 2);
 
+            // 3. رسم تقسيمات الساعات الـ 24 المبتكرة
             const step = (2 * Math.PI) / 24;
             for (let i = 0; i < 24; i++) {
                 const angle = i * step - Math.PI / 2;
@@ -270,24 +304,47 @@
                 ctx.save();
                 ctx.rotate(angle);
                 ctx.beginPath(); ctx.moveTo(radius - 65, 0); ctx.lineTo(radius - 20, 0);
-                ctx.strokeStyle = h.prayer ? '#10b981' : 'rgba(245, 158, 11, 0.4)'; ctx.lineWidth = h.prayer ? 3 : 1.5; ctx.stroke();
+                ctx.strokeStyle = h.prayer || h.special ? '#10b981' : (h.type === 'day' ? 'rgba(245, 158, 11, 0.4)' : 'rgba(99, 102, 241, 0.4)');
+                ctx.lineWidth = h.prayer || h.special ? 3 : 1.5; ctx.stroke();
                 
                 ctx.rotate(Math.PI / 2);
                 ctx.font = 'bold 11px "Cairo", sans-serif';
-                ctx.fillStyle = h.prayer ? '#34d399' : '#38bdf8';
+                ctx.fillStyle = h.prayer || h.special ? '#34d399' : '#38bdf8';
                 ctx.fillText(h.id.toString(), 0, -(radius - 32));
-                ctx.fillStyle = (i === curIndex) ? '#facc15' : (h.prayer ? '#10b981' : '#9ca3af');
+                ctx.fillStyle = (i === curIndex) ? '#facc15' : (h.prayer || h.special ? '#34d399' : '#9ca3af');
                 ctx.fillText(h.name, 0, -(radius - 85));
                 ctx.restore();
             }
 
+            // 4. رسم العقارب الذهبية الثلاثة الملكية الفاخرة
+
+            // (أ) عقرب الساعات (ذهبي ملكي سميك)
             const hAngle = ((curIndex + prog) * step) - Math.PI / 2;
             ctx.save();
             ctx.rotate(hAngle);
-            ctx.beginPath(); ctx.moveTo(0, 15); ctx.lineTo(0, -(radius - 125)); ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, 15); ctx.lineTo(0, -(radius - 140));
+            ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.stroke();
             ctx.restore();
 
-            ctx.beginPath(); ctx.arc(0, 0, 5, 0, 2 * Math.PI); ctx.fillStyle = '#f3f4f6'; ctx.fill();
+            // (ب) عقرب الدقائق (ذهبي براق متوسط الطول والسمك)
+            const minProg = prog;
+            const minAngle = (minProg * 2 * Math.PI) - Math.PI / 2;
+            ctx.save();
+            ctx.rotate(minAngle);
+            ctx.beginPath(); ctx.moveTo(0, 20); ctx.lineTo(0, -(radius - 100));
+            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3.5; ctx.lineCap = 'round'; ctx.stroke();
+            ctx.restore();
+
+            // (جـ) عقرب الثواني (ذهبي رفيع وانسيابي)
+            const secAngle = ((seconds / 60) * 2 * Math.PI) - Math.PI / 2;
+            ctx.save();
+            ctx.rotate(secAngle);
+            ctx.beginPath(); ctx.moveTo(0, 25); ctx.lineTo(0, -(radius - 75));
+            ctx.strokeStyle = '#fde047'; ctx.lineWidth = 1.5; ctx.stroke();
+            ctx.restore();
+
+            // مركز عقارب الساعة الذهبي
+            ctx.beginPath(); ctx.arc(0, 0, 7, 0, 2 * Math.PI); ctx.fillStyle = '#f59e0b'; ctx.fill();
             ctx.restore();
         }
 
