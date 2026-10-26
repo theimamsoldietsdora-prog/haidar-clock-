@@ -12,51 +12,85 @@
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap');
         body { font-family: 'Tajawal', sans-serif; }
         .amiri-font { font-family: 'Amiri', serif; }
+        .clock-ring {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-between p-4 relative overflow-x-hidden">
 
-    <div class="absolute inset-0 z-0 opacity-40 pointer-events-none bg-cover bg-center" style="background-image: radial-gradient(circle at center, rgba(16, 185, 129, 0.2) 0%, rgba(2, 44, 34, 0.9) 70%), linear-gradient(to bottom, #022c22, #09090b);"></div>
+    <!-- خلفية جمالية فلكية متناسقة -->
+    <div class="absolute inset-0 z-0 opacity-40 pointer-events-none bg-cover bg-center" style="background-image: radial-gradient(circle at center, rgba(16, 185, 129, 0.25) 0%, rgba(2, 44, 34, 0.95) 70%, linear-gradient(to bottom, #022c22, #09090b);"></div>
 
+    <!-- رأس الصفحة -->
     <header class="relative z-10 text-center my-4">
-        <h1 class="amiri-font text-3xl md:text-4xl font-bold text-amber-400 drop-shadow-lg">ساعة حيدر آل عگاب الفلكية</h1>
-        <p class="text-xs md:text-sm text-emerald-300 mt-1">نظام التوقيت العكابي المتغير (ساعات النهار والليل الحيوية)</p>
+        <h1 class="amiri-font text-3xl md:text-5xl font-bold text-amber-400 drop-shadow-md">ساعة حيدر آل عگاب الفلكية</h1>
+        <p class="text-xs md:text-sm text-emerald-300 mt-1 tracking-wide">نظام التوقيت العكابي المتغير (ساعات النهار والليل الحيوية)</p>
     </header>
 
-    <main class="relative z-10 flex flex-col items-center justify-center my-auto w-full max-w-md">
-        <div class="relative w-72 h-72 md:w-80 md:h-80 rounded-full border-4 border-amber-500/50 bg-slate-900/85 shadow-2xl backdrop-blur-md flex items-center justify-center p-4">
-            <div id="clock-face" class="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-                <span id="current-hour-name" class="amiri-font text-2xl font-bold text-amber-300 block mb-2">الشروق</span>
-                <span id="current-time-display" class="text-2xl font-mono text-emerald-400 block mb-1">00:00:00</span>
-                <span id="current-hour-length" class="text-xs text-slate-300 block">مقدار الساعة: 60 دقيقة</span>
+    <!-- المحتوى الرئيسي للساعة -->
+    <main class="relative z-10 flex flex-col items-center justify-center my-auto w-full max-w-lg">
+        <!-- قرص الساعة الفلكي -->
+        <div class="relative w-80 h-80 md:w-96 md:h-96 rounded-full border-4 border-amber-500/60 bg-slate-900/90 shadow-[0_0_35px_rgba(245,158,11,0.2)] backdrop-blur-md flex items-center justify-center p-4 clock-ring">
+            <div id="clock-face" class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+                <span id="period-type" class="text-xs text-emerald-400 font-semibold tracking-wider mb-1">ساعات النهار الفلكية</span>
+                <span id="current-hour-name" class="amiri-font text-3xl md:text-4xl font-bold text-amber-300 drop-shadow mb-2">الشروق</span>
+                <span id="current-time-display" class="text-2xl md:text-3xl font-mono text-emerald-300 block mb-2">00:00:00</span>
+                <span id="current-hour-length" class="text-xs text-slate-300 bg-slate-800/80 px-3 py-1 rounded-full border border-amber-500/30">مقدار الساعة: 60 دقيقة</span>
             </div>
         </div>
 
-        <div class="mt-6 bg-slate-900/90 border border-emerald-500/30 rounded-xl p-4 w-full text-sm shadow-inner">
-            <div class="flex justify-between py-1 border-b border-slate-800">
+        <!-- لوحة التفاصيل الفلكية -->
+        <div class="mt-6 bg-slate-900/90 border border-emerald-500/30 rounded-2xl p-4 w-full text-sm shadow-xl backdrop-blur-sm">
+            <div class="flex justify-between items-center py-2 border-b border-slate-800">
                 <span class="text-slate-400">الفصل الفلكي:</span>
                 <span id="season-display" class="font-bold text-amber-400">الاعتدال الربيعي/الخريفي</span>
             </div>
-            <div class="flex justify-between py-1 border-b border-slate-800">
-                <span class="text-slate-400">حالة النهار:</span>
-                <span id="day-length-info" class="font-bold text-emerald-300">12 ساعة نهار / 12 ساعة ليل</span>
+            <div class="flex justify-between items-center py-2 border-b border-slate-800">
+                <span class="text-slate-400">حالة التوقيت:</span>
+                <span id="day-length-info" class="font-bold text-emerald-300">متغير (كثافة زمنية فصلية)</span>
             </div>
-            <div class="flex justify-between py-1">
+            <div class="flex justify-between items-center py-2">
                 <span class="text-slate-400">المهندس والمخترع:</span>
                 <span class="font-bold text-amber-300">حيدر آل عگاب</span>
             </div>
         </div>
     </main>
 
+    <!-- تذييل الصفحة -->
     <footer class="relative z-10 text-center mt-4 text-xs text-slate-500">
-        <p>جميع الحقوق محفوظة للمخترع © حيدر آل عگاب</p>
+        <p>جميع الحقوق الفكرية والتصميمية محفوظة للمخترع © حيدر آل عگاب</p>
     </footer>
 
+    <!-- محرك التوقيت الفلكي العكابي -->
     <script>
-        setInterval(() => {
+        const arabicHoursDay = ["الشروق", "البكور", "الغدوة", "الضحى", "الهاجرة", "الظهيرة", "الرواح", "العصر", "القصر", "الأصيل", "العشي", "الغروب"];
+        const arabicHoursNight = ["الشفق", "الغسق", "العتمة", "السدفة", "الفحمة", "الزلة", "الزلفى", "البهره", "السحر", "الفجر", "الصبح", "الصباح"];
+
+        function updateHaidarClock() {
             const now = new Date();
-            document.getElementById('current-time-display').innerText = now.toLocaleTimeString('en-US', { hour12: false });
-        }, 1000);
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            
+            document.getElementById('current-time-display').innerText = 
+                String(hours).padStart(2, '0') + ':' + 
+                String(minutes).padStart(2, '0') + ':' + 
+                String(seconds).padStart(2, '0');
+
+            // محاكاة توزيع ساعات النظام الفلكي العكابي النهاري والليلي
+            let index = Math.floor(hours / 2) % 12;
+            if (hours >= 6 && hours < 18) {
+                document.getElementById('period-type').innerText = "ساعات النهار الفلكية";
+                document.getElementById('current-hour-name').innerText = arabicHoursDay[index];
+            } else {
+                document.getElementById('period-type').innerText = "ساعات الليل الفلكية";
+                document.getElementById('current-hour-name').innerText = arabicHoursNight[index];
+            }
+        }
+
+        setInterval(updateHaidarClock, 1000);
+        updateHaidarClock();
     </script>
 </body>
 </html>
