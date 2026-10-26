@@ -10,7 +10,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap');
         body {
             font-family: 'Cairo', sans-serif;
-            background: radial-gradient(circle at center, #111827 0%, #030712 100%);
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
             color: #f3f4f6;
             min-height: 100vh;
         }
@@ -18,23 +18,23 @@
             font-family: 'Amiri', serif;
         }
         .glass-panel {
-            background: rgba(17, 24, 39, 0.75);
+            background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            box-shadow: 0 25px 30px -10px rgba(0, 0, 0, 0.6);
         }
         .gold-glow {
-            text-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+            text-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between p-3 md:p-6">
 
     <!-- رأس الصفحة -->
-    <header class="text-center max-w-4xl mx-auto mb-4">
+    <header class="text-center max-w-4xl mx-auto mb-3">
         <h1 class="text-3xl md:text-5xl font-bold amiri-font text-amber-400 gold-glow mb-1">الساعة الفلكية المبتكرة</h1>
-        <p class="text-xs md:text-sm text-gray-400">اختراع التوقيت الزماني المتغير المستقل عن التوقيت العالمي (ساعات النهار والليل العربية)</p>
-        <div class="mt-2 text-xs text-amber-300 font-semibold tracking-wider">اختراع وابتكار: المهندس حيدر ال عگاب</div>
+        <p class="text-xs md:text-sm text-gray-400">التوقيت الزماني المتغير المستقل عن التوقيت العالمي (ساعات النهار والليل العربية)</p>
+        <div class="mt-2 text-xs md:text-sm text-amber-300 font-bold tracking-wider amiri-font">ابتكار واختراع: المهندس حيدر ال عگاب</div>
     </header>
 
     <!-- المحتوى الرئيسي -->
@@ -83,10 +83,11 @@
             </div>
         </section>
 
-        <!-- الساعة التناظرية الفلكية الفاخرة (Canvas) -->
+        <!-- الساعة التناظرية الفلكية الكبرى (Canvas) -->
         <section class="lg:col-span-8 flex flex-col items-center justify-center glass-panel p-5 rounded-2xl">
-            <div class="relative w-full max-w-[460px] aspect-square flex items-center justify-center">
-                <canvas id="clockCanvas" width="600" height="600" class="w-full h-full drop-shadow-2xl"></canvas>
+            <div class="relative w-full max-w-[540px] aspect-square flex items-center justify-center">
+                <!-- تم تكبير دقة الـ Canvas لتكون أكبر وواضحة جداً -->
+                <canvas id="clockCanvas" width="700" height="700" class="w-full h-full drop-shadow-2xl"></canvas>
             </div>
 
             <!-- مؤشر الساعة الحالي الرقمي -->
@@ -275,41 +276,54 @@
 
             // الإطار الخارجي الملكي
             ctx.beginPath();
-            ctx.arc(0, 0, radius - 15, 0, 2 * Math.PI);
-            const bgGrad = ctx.createRadialGradient(0, 0, 50, 0, 0, radius);
+            ctx.arc(0, 0, radius - 20, 0, 2 * Math.PI);
+            const bgGrad = ctx.createRadialGradient(0, 0, 40, 0, 0, radius);
             bgGrad.addColorStop(0, '#0f172a');
             bgGrad.addColorStop(1, '#020617');
             ctx.fillStyle = bgGrad;
             ctx.fill();
-            ctx.lineWidth = 5;
+            ctx.lineWidth = 6;
             ctx.strokeStyle = '#f59e0b';
             ctx.stroke();
 
-            // رسم هالة نورانية في المركز تعبيرية خيالية (الإمام المهدي عجل الله فرجه)
-            const centerGlow = ctx.createRadialGradient(0, 0, 5, 0, 0, 110);
-            centerGlow.addColorStop(0, 'rgba(251, 191, 36, 0.35)');
-            centerGlow.addColorStop(0.5, 'rgba(56, 189, 248, 0.15)');
-            centerGlow.addColorStop(1, 'transparent');
-            ctx.fillStyle = centerGlow;
+            // رسم الهالة النورانية المركزية الكبرى
+            const starGlow = ctx.createRadialGradient(0, 0, 5, 0, 0, 130);
+            starGlow.addColorStop(0, 'rgba(251, 191, 36, 0.45)');
+            starGlow.addColorStop(0.5, 'rgba(56, 189, 248, 0.2)');
+            starGlow.addColorStop(1, 'transparent');
+            ctx.fillStyle = starGlow;
             ctx.beginPath();
-            ctx.arc(0, 0, 110, 0, 2 * Math.PI);
+            ctx.arc(0, 0, 130, 0, 2 * Math.PI);
             ctx.fill();
 
-            // رسم اسم المخترع في المركز
+            // رسم الهلال النير المركزي
             ctx.save();
-            ctx.font = 'bold 12px "Cairo", sans-serif';
+            ctx.beginPath();
+            ctx.arc(0, -45, 22, 0, Math.PI * 2);
             ctx.fillStyle = '#facc15';
-            ctx.textAlign = 'center';
-            ctx.fillText("ابتكار واختراع", 0, -22);
-            ctx.font = 'bold 14px "Amiri", serif';
-            ctx.fillStyle = '#ffffff';
-            ctx.fillText("المهندس حيدر ال عگاب", 0, 2);
-            ctx.font = '9px "Cairo", sans-serif';
-            ctx.fillStyle = '#94a3b8';
-            ctx.fillText("الساعة الفلكية المبتكرة", 0, 22);
+            ctx.shadowColor = '#f59e0b';
+            ctx.shadowBlur = 20;
+            ctx.fill();
             ctx.restore();
 
-            // رسم أقسام الساعات الـ 24 مع أسماء الساعات والأرقام الخارجية المقابلة
+            // رسم اسم المخترع بخط أكبر وأوضح في المركز
+            ctx.save();
+            ctx.font = 'bold 13px "Cairo", sans-serif';
+            ctx.fillStyle = '#38bdf8';
+            ctx.textAlign = 'center';
+            ctx.fillText("ابتكار واختراع المهندس", 0, -8);
+            ctx.font = 'bold 19px "Amiri", serif';
+            ctx.fillStyle = '#ffffff';
+            ctx.shadowColor = '#ffffff';
+            ctx.shadowBlur = 12;
+            ctx.fillText("حيدر ال عگاب", 0, 18);
+            ctx.font = '11px "Cairo", sans-serif';
+            ctx.fillStyle = '#94a3b8';
+            ctx.shadowBlur = 0;
+            ctx.fillText("الساعة الفلكية المبتكرة", 0, 42);
+            ctx.restore();
+
+            // رسم أقسام الساعات الـ 24 والأرقام الخارجية بخطوط كبيرة وواضحة جداً
             const angleStep = (2 * Math.PI) / 24;
             for (let i = 0; i < 24; i++) {
                 const angle = i * angleStep - Math.PI / 2;
@@ -320,38 +334,38 @@
 
                 // خط فاصل
                 ctx.beginPath();
-                ctx.moveTo(radius - 65, 0);
-                ctx.lineTo(radius - 20, 0);
-                ctx.strokeStyle = hObj.type === 'day' ? 'rgba(245, 158, 11, 0.4)' : 'rgba(99, 102, 241, 0.4)';
-                ctx.lineWidth = 1.5;
+                ctx.moveTo(radius - 80, 0);
+                ctx.lineTo(radius - 25, 0);
+                ctx.strokeStyle = hObj.type === 'day' ? 'rgba(245, 158, 11, 0.5)' : 'rgba(99, 102, 241, 0.5)';
+                ctx.lineWidth = 2;
                 ctx.stroke();
 
-                // رقم الساعة المقابل في الدائرة الخارجية (1 إلى 24)
+                // رقم الساعة المقابل في الدائرة الخارجية بخط كبير وواضح (1 إلى 24)
                 ctx.save();
                 ctx.rotate(Math.PI / 2);
-                ctx.font = 'bold 11px "Cairo", sans-serif';
+                ctx.font = 'bold 15px "Cairo", sans-serif';
                 ctx.fillStyle = '#38bdf8';
-                ctx.fillText(hObj.id.toString(), 0, -(radius - 32));
+                ctx.fillText(hObj.id.toString(), 0, -(radius - 38));
                 ctx.restore();
 
-                // اسم الساعة العربية
+                // اسم الساعة العربية بخط كبير وواضح
                 ctx.rotate(Math.PI / 2);
-                ctx.font = 'bold 11px "Cairo", sans-serif';
-                ctx.fillStyle = (i === currentArabicHourIndex) ? '#facc15' : '#9ca3af';
+                ctx.font = 'bold 14px "Cairo", sans-serif';
+                ctx.fillStyle = (i === currentArabicHourIndex) ? '#facc15' : '#e2e8f0';
                 ctx.textAlign = 'center';
-                ctx.fillText(hObj.name, 0, -(radius - 85));
+                ctx.fillText(hObj.name, 0, -(radius - 100));
                 ctx.restore();
             }
 
-            // أميال الساعة (العقارب)
+            // أميال الساعة (العقارب بحجم أكبر)
             const hourAngle = ((currentArabicHourIndex + progressInCurrentHour) * angleStep) - Math.PI / 2;
             ctx.save();
             ctx.rotate(hourAngle);
             ctx.beginPath();
-            ctx.moveTo(0, 15);
-            ctx.lineTo(0, -(radius - 125));
+            ctx.moveTo(0, 20);
+            ctx.lineTo(0, -(radius - 140));
             ctx.strokeStyle = '#f59e0b';
-            ctx.lineWidth = 4;
+            ctx.lineWidth = 6;
             ctx.lineCap = 'round';
             ctx.stroke();
             ctx.restore();
@@ -362,10 +376,10 @@
             ctx.save();
             ctx.rotate(minuteAngle);
             ctx.beginPath();
-            ctx.moveTo(0, 20);
-            ctx.lineTo(0, -(radius - 95));
+            ctx.moveTo(0, 25);
+            ctx.lineTo(0, -(radius - 110));
             ctx.strokeStyle = '#38bdf8';
-            ctx.lineWidth = 2.5;
+            ctx.lineWidth = 4;
             ctx.lineCap = 'round';
             ctx.stroke();
             ctx.restore();
@@ -375,16 +389,16 @@
             ctx.save();
             ctx.rotate(secondAngle);
             ctx.beginPath();
-            ctx.moveTo(0, 25);
-            ctx.lineTo(0, -(radius - 75));
+            ctx.moveTo(0, 30);
+            ctx.lineTo(0, -(radius - 90));
             ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 1.2;
+            ctx.lineWidth = 2;
             ctx.stroke();
             ctx.restore();
 
-            // نقطة المركز الدائرية
+            // نقطة المركز الكبرى
             ctx.beginPath();
-            ctx.arc(0, 0, 5, 0, 2 * Math.PI);
+            ctx.arc(0, 0, 7, 0, 2 * Math.PI);
             ctx.fillStyle = '#f3f4f6';
             ctx.fill();
 
