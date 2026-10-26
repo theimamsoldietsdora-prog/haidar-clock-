@@ -80,7 +80,7 @@
             </div>
         </section>
 
-        <!-- الساعة التناظرية الفلكية (Canvas) -->
+        <!-- الساعة التناظرية الفلكية (Canvas) والأميل -->
         <section class="lg:col-span-8 flex flex-col items-center justify-center glass-panel p-6 rounded-2xl shadow-xl">
             <div class="relative w-full max-w-[420px] aspect-square flex items-center justify-center">
                 <canvas id="clockCanvas" width="500" height="500" class="w-full h-full drop-shadow-2xl"></canvas>
@@ -104,11 +104,9 @@
         </div>
     </footer>
 
-    <!-- البرمجة والخوارزميات الدقيقة -->
+    <!-- البرمجة والخوارزميات الدقيقة لأميال الساعة -->
     <script>
-        // مصفوفة أسماء الساعات الـ 24 بالترتيب المطلوب بدقة تامة
         const arabicHours = [
-            // النهار (1 إلى 12)
             { id: 1, name: "الشروق", type: "day" },
             { id: 2, name: "البكور", type: "day" },
             { id: 3, name: "الغدوه", type: "day" },
@@ -121,7 +119,6 @@
             { id: 10, name: "الأصيل", type: "day" },
             { id: 11, name: "العشي", type: "day" },
             { id: 12, name: "الغروب", type: "day" },
-            // الليل (13 إلى 24)
             { id: 13, name: "الشفق", type: "night" },
             { id: 14, name: "الغسق", type: "night" },
             { id: 15, name: "العتمه", type: "night" },
@@ -140,12 +137,11 @@
         let simDate = new Date();
         let virtualTime = new Date();
 
-        // تهيئة شبكة أسماء الساعات في الأسفل
         const gridContainer = document.getElementById('hoursGrid');
         arabicHours.forEach(h => {
             const div = document.createElement('div');
             div.id = `hour-card-${h.id}`;
-            div.className = `p-2 rounded-lg border text-center transition ${h.type === 'day' ? 'bg-amber-950/30 border-amber-500/30 text-amber-200' : 'bg-indigo-950/30 border-indigo-500/30 text-indigo-200'}`;
+            div.className = `p-2 rounded-lg border text-center transition ${h.type === 'day' ? 'bg-amber-950/35 border-amber-500/30 text-amber-200' : 'bg-indigo-950/35 border-indigo-500/30 text-indigo-200'}`;
             div.innerHTML = `<span class="block text-[10px] text-gray-400">ساعة ${h.id}</span><strong class="text-sm">${h.name}</strong>`;
             gridContainer.appendChild(div);
         });
@@ -177,27 +173,17 @@
             virtualTime = new Date(val + "T06:00:00");
         }
 
-        // الخوارزمية الفلكية الدقيقة لحساب أطوال النهار والليل وساعات الدقائق المتغيرة
         function getAstronomicalParameters(date) {
             const startOfYear = new Date(date.getFullYear(), 0, 1);
             const dayOfYear = Math.floor((date - startOfYear) / (1000 * 60 * 60 * 24));
-
- محطة الاعتدال الربيعي 21/3 (اليوم ~80)، الانقلاب الصيفي 21/6 (~172)، الخريفي 21/9 (~264)، الشتوي 21/12 (~355)
-            // نستخدم دالة جيبية سلسة (Cosine) لنمذجة التغير التدريجي الفصلي بدقة متناهية
             const angle = (2 * Math.PI * (dayOfYear - 80)) / 365;
             const seasonalFactor = Math.cos(angle); 
-            // seasonalFactor يتراوح بين +1 في الصيف (21 يونيو) و -1 في الشتاء (21 ديسمبر)، و 0 في الاعتدالين.
 
-            // ساعات النهار تتراوح من 10 ساعات (في الشتاء) إلى 14 ساعة (في الصيف)، وفي الاعتدالين 12 ساعة
             let dayHours = 12 + 2 * seasonalFactor;
             let nightHours = 24 - dayHours;
 
-            // طول دقيقة النهار والليل الزمانية (حيث 60 دقيقة معيارية = ساعة معيارية)
-            // في الشتاء: النهار 10 ساعات -> دقيقة النهار الزمانية أطول (70 دقيقة معيارية إجمالاً موزعة على 12 ساعة زمانية -> 50 دقيقة لكل ساعة نهارية؟ لنضبطها حسب الشرط 7 بدقة)
-            // الشرط 7: في ذروة الشتاء (نهار 10 ساعات، ليل 14 ساعة): مقدار ساعة النهار 50 دقيقة، ومقدار ساعة الليل 84 دقيقة (أو حسب التناسب المعياري).
-            // لنصيغ الخوارزمية الرياضية الدقيقة بناءً على نسب الساعات المئوية:
-            let dayHourMinutes = (dayHours / 12) * 60; // إذا النهار 10 ساعات: (10/12)*60 = 50 دقيقة معيارية للساعة الواحدة
-            let nightHourMinutes = (nightHours / 12) * 60; // إذا الليل 14 ساعة: (14/12)*60 = 70 دقيقة معيارية (أو تناسبها)
+            let dayHourMinutes = (dayHours / 12) * 60; 
+            let nightHourMinutes = (nightHours / 12) * 60; 
 
             let seasonName = "اعتدال ربيعي / خريفي";
             if (seasonalFactor > 0.5) seasonName = "ذروة فصل الصيف (نهار طويل)";
@@ -215,7 +201,6 @@
             };
         }
 
-        // رسم الساعة التناظرية وتحديث المحرك
         const canvas = document.getElementById('clockCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -228,31 +213,26 @@
 
             ctx.clearRect(0, 0, width, height);
 
-            // حساب الوقت الحالي
             let now = new Date();
             if (isSimulation) {
                 const speed = parseFloat(document.getElementById('simSpeed').value) || 1;
-                virtualTime = new Date(virtualTime.getTime() + (1000 * speed * 0.05)); // تحديث تدريجي
+                virtualTime = new Date(virtualTime.getTime() + (1000 * speed * 0.1));
                 now = virtualTime;
             }
 
             const astro = getAstronomicalParameters(now);
 
-            // تحديث لوحة البيانات النصية
             document.getElementById('seasonName').innerText = astro.seasonName;
             document.getElementById('dayHoursVal').innerText = `${astro.dayHours} ساعة معيارية`;
             document.getElementById('nightHoursVal').innerText = `${astro.nightHours} ساعة معيارية`;
             document.getElementById('dayHourLength').innerText = `${astro.dayHourMinutes} دقيقة`;
             document.getElementById('nightHourLength').innerText = `${astro.nightHourMinutes} دقيقة`;
 
-            // حساب الساعة الزمانية الحالية (24 ساعة مقسمة على مدار اليوم الفلكي)
-            // لنفترض الشروق يبدأ الساعة 6:00 صباحاً معيارياً لتبسيط المزامنة الزمانية المبتكرة
             const hours = now.getHours();
             const minutes = now.getMinutes();
             const seconds = now.getSeconds();
             const totalSecondsFromSunrise = ((hours - 6) * 3600 + minutes * 60 + seconds + 86400) % 86400;
             
-            // يوم معيار من 24 ساعة مقسم بين نهار وليل بناءً على طول النهار الفعلي
             const totalDaySecs = parseFloat(astro.dayHours) * 3600;
             const totalNightSecs = 86400 - totalDaySecs;
 
@@ -261,41 +241,36 @@
             let isDaytime = true;
 
             if (totalSecondsFromSunrise < totalDaySecs) {
-                // نحن في ساعات النهار (1 إلى 12)
                 isDaytime = true;
                 const secPerDayHour = totalDaySecs / 12;
-                currentArabicHourIndex = Math.floor(totalSecondsFromSunrise / secPerDayHour); // 0 إلى 11
+                currentArabicHourIndex = Math.floor(totalSecondsFromSunrise / secPerDayHour);
                 progressInCurrentHour = (totalSecondsFromSunrise % secPerDayHour) / secPerDayHour;
             } else {
-                // نحن في ساعات الليل (13 إلى 24)
                 isDaytime = false;
                 const secFromSunset = totalSecondsFromSunrise - totalDaySecs;
                 const secPerNightHour = totalNightSecs / 12;
-                currentArabicHourIndex = 12 + Math.floor(secFromSunset / secPerNightHour); // 12 إلى 23
+                currentArabicHourIndex = 12 + Math.floor(secFromSunset / secPerNightHour);
                 progressInCurrentHour = (secFromSunset % secPerNightHour) / secPerNightHour;
             }
 
             if (currentArabicHourIndex >= 24) currentArabicHourIndex = 23;
             const activeHourObj = arabicHours[currentArabicHourIndex];
 
-            // تحديث واجهة الساعة الحالية الرقمية
             document.getElementById('currentHourName').innerText = activeHourObj.name;
-            document.getElementById('currentDetailedTime').innerText = `الساعة ${activeHourObj.id} (${activeHourObj.name}) | الدقيقة ${Math.floor(progressInCurrentHour * 60)} | الثانیه ${seconds}`;
+            document.getElementById('currentDetailedTime').innerText = `الساعة ${activeHourObj.id} | الدقيقة ${Math.floor(progressInCurrentHour * 60)} | الثانية ${seconds}`;
             document.getElementById('periodIndicator').innerText = isDaytime ? "فترة النهار العربي" : "فترة الليل العربي";
             document.getElementById('periodIndicator').className = isDaytime ? "text-xs px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full inline-block mt-1" : "text-xs px-3 py-1 bg-indigo-500/20 text-indigo-300 rounded-full inline-block mt-1";
 
-            // تفعيل بطاقة الساعة النشطة في القائمة السفلى
             document.querySelectorAll('[id^="hour-card-"]').forEach(el => el.classList.remove('ring-2', 'ring-amber-400', 'bg-amber-900/60'));
             const activeCard = document.getElementById(`hour-card-${activeHourObj.id}`);
             if (activeCard) {
                 activeCard.classList.add('ring-2', 'ring-amber-400', 'bg-amber-900/60');
             }
 
-            // --- رسم الساعة التناظرية بالـ Canvas ---
             ctx.save();
             ctx.translate(cx, cy);
 
-            // الإطار الخارجي
+            // الإطار الخارجي للساعة
             ctx.beginPath();
             ctx.arc(0, 0, radius - 15, 0, 2 * Math.PI);
             ctx.fillStyle = '#111827';
@@ -304,7 +279,7 @@
             ctx.strokeStyle = isDaytime ? '#f59e0b' : '#6366f1';
             ctx.stroke();
 
-            // رسم أقسام الـ 24 ساعة على القرص التناظري
+            // رسم أقسام الساعات الـ 24 واسمائها على الدائرة
             const angleStep = (2 * Math.PI) / 24;
             for (let i = 0; i < 24; i++) {
                 const angle = i * angleStep - Math.PI / 2;
@@ -313,7 +288,6 @@
                 ctx.save();
                 ctx.rotate(angle);
 
-                // خط فاصل بين الساعات
                 ctx.beginPath();
                 ctx.moveTo(radius - 55, 0);
                 ctx.lineTo(radius - 20, 0);
@@ -321,7 +295,6 @@
                 ctx.lineWidth = 2;
                 ctx.stroke();
 
-                // كتابة اسم الساعة على القرص
                 ctx.rotate(Math.PI / 2);
                 ctx.font = 'bold 12px "Cairo", sans-serif';
                 ctx.fillStyle = (i === currentArabicHourIndex) ? '#facc15' : '#9ca3af';
@@ -330,7 +303,7 @@
                 ctx.restore();
             }
 
-            // رسم عقرب الساعات المبتكر (يمسح الـ 24 ساعة)
+            // أميال الساعة (العقارب): عقرب الساعات
             const hourAngle = ((currentArabicHourIndex + progressInCurrentHour) * angleStep) - Math.PI / 2;
             ctx.save();
             ctx.rotate(hourAngle);
@@ -343,7 +316,7 @@
             ctx.stroke();
             ctx.restore();
 
-            // رسم عقرب الدقائق الزمانية المتغيرة
+            // عقرب الدقائق الزمانية المتغيرة
             const minuteProgress = (progressInCurrentHour * 60) % 60 / 60;
             const minuteAngle = (minuteProgress * 2 * Math.PI) - Math.PI / 2;
             ctx.save();
@@ -357,7 +330,7 @@
             ctx.stroke();
             ctx.restore();
 
-            // رسم عقرب الثواني
+            // عقرب الثواني
             const secondAngle = ((seconds / 60) * 2 * Math.PI) - Math.PI / 2;
             ctx.save();
             ctx.rotate(secondAngle);
@@ -369,7 +342,7 @@
             ctx.stroke();
             ctx.restore();
 
-            // مركز العقارب
+            // نقطة المركز
             ctx.beginPath();
             ctx.arc(0, 0, 7, 0, 2 * Math.PI);
             ctx.fillStyle = '#f3f4f6';
@@ -378,7 +351,6 @@
             ctx.restore();
         }
 
-        // حلقة التشغيل والتحديث المستمر
         setInterval(drawClock, 100);
         drawClock();
     </script>
