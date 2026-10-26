@@ -25,15 +25,26 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-3 md:p-6">
 
-    <!-- رأس الصفحة وأزرار التجربة الفورية المضمونة -->
+    <!-- ملفات الصوت المباشرة والموثوقة -->
+    <audio id="adhanAudio" preload="auto">
+        <source src="https://static.rafed.net/MP3Files/adhan/08612-adan.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="quranAudio" preload="auto">
+        <source src="https://ia801500.us.archive.org/15/items/Quran_Nasr/Nasr.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="istighfarAudio" preload="auto">
+        <source src="https://ia801500.us.archive.org/24/items/Istighfar_Interactive/Istighfar.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- رأس الصفحة -->
     <header class="text-center max-w-4xl mx-auto mb-4 space-y-2">
         <h1 class="text-3xl md:text-5xl font-bold amiri-font text-amber-400 gold-glow mb-1">الساعة الفلكية المبتكرة</h1>
         <p class="text-xs md:text-sm text-gray-300">التوقيت الزماني المتغير المستقل عن التوقيت العالمي (ساعات النهار والليل العربية)</p>
         <div class="text-xs text-amber-300 font-semibold tracking-wider">اختراع وابتكار: المهندس حيدر ال عگاب</div>
         <div class="pt-2 flex flex-wrap justify-center gap-2">
-            <button onclick="playSystemAudio('adhan')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">🔊 تجربة الأذان</button>
-            <button onclick="playSystemAudio('quran')" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📖 تجربة سورة النصر</button>
-            <button onclick="playSystemAudio('istighfar')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📿 تجربة الاستغفار</button>
+            <button onclick="playAudioDirect('adhanAudio')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">🔊 تجربة الأذان</button>
+            <button onclick="playAudioDirect('quranAudio')" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📖 تجربة سورة النصر</button>
+            <button onclick="playAudioDirect('istighfarAudio')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📿 تجربة الاستغفار</button>
         </div>
     </header>
 
@@ -108,20 +119,20 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs" id="hoursGrid"></div>
     </footer>
 
-    <!-- البرمجة والخوارزميات الصوتية الآمنة لمتصفح آيفون -->
+    <!-- البرمجة والخوارزميات -->
     <script>
         const arabicHours = [
             { id: 1, name: "الشروق", type: "day" }, { id: 2, name: "البكور", type: "day" },
             { id: 3, name: "الغدوه", type: "day" }, { id: 4, name: "الضحى", type: "day" },
-            { id: 5, name: "الهاجره", type: "day" }, { id: 6, name: "الظهيره", type: "day", prayer: "صلاة دلوك الشمس", audioType: "adhan" },
+            { id: 5, name: "الهاجره", type: "day" }, { id: 6, name: "الظهيره", type: "day", prayer: "صلاة دلوك الشمس", audio: "adhanAudio" },
             { id: 7, name: "الرواح", type: "day" }, { id: 8, name: "العصر", type: "day" },
             { id: 9, name: "القصر", type: "day" }, { id: 10, name: "الأصيل", type: "day" },
             { id: 11, name: "العشي", type: "day" }, { id: 12, name: "الغروب", type: "day" },
-            { id: 13, name: "الشفق", type: "night" }, { id: 14, name: "الغسق", type: "night", prayer: "صلاة غسق الليل", audioType: "adhan" },
+            { id: 13, name: "الشفق", type: "night" }, { id: 14, name: "الغسق", type: "night", prayer: "صلاة غسق الليل", audio: "adhanAudio" },
             { id: 15, name: "العتمه", type: "night" }, { id: 16, name: "السدفة", type: "night" },
             { id: 17, name: "الفحمة", type: "night" }, { id: 18, name: "الزلة", type: "night" },
-            { id: 19, name: "الزلفى", type: "night" }, { id: 20, name: "البهره", type: "night", prayer: "صلاة الليل", audioType: "adhan" },
-            { id: 21, name: "السحر", type: "night", special: "سورة النصر + الاستغفار" }, { id: 22, name: "الفجر", type: "night", prayer: "صلاة قرآن الفجر", audioType: "adhan" },
+            { id: 19, name: "الزلفى", type: "night" }, { id: 20, name: "البهره", type: "night", prayer: "صلاة الليل", audio: "adhanAudio" },
+            { id: 21, name: "السحر", type: "night", special: "سورة النصر + الاستغفار" }, { id: 22, name: "الفجر", type: "night", prayer: "صلاة قرآن الفجر", audio: "adhanAudio" },
             { id: 23, name: "الصبح", type: "night" }, { id: 24, name: "الصباح", type: "night" }
         ];
 
@@ -130,23 +141,11 @@
         let virtualTime = new Date();
         let lastTriggeredEvent = "";
 
-        // محرك الصوت التفاعلي المباشر للآيفون والمتصفحات
-        function playSystemAudio(type) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                let text = "";
-                if (type === 'adhan') {
-                    text = "الله أكبر، حي على الصلاة، حي على الفلاح";
-                } else if (type === 'quran') {
-                    text = "إذا جاء نصر الله والفتح، ورأيت الناس يدخلون في دين الله أفواجا، فسبح بححمد ربك واستغفره إنه كان توابا";
-                } else if (type === 'istighfar') {
-                    text = "أستغفر الله العظيم وأتوب إليه";
-                }
-                let utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'ar-SA';
-                utterance.rate = 0.85;
-                utterance.pitch = 1.0;
-                window.speechSynthesis.speak(utterance);
+        function playAudioDirect(audioId) {
+            const audio = document.getElementById(audioId);
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(e => console.log("تفاعل المستخدم مطلوب:", e));
             }
         }
 
@@ -255,20 +254,20 @@
             if (curIndex >= 24) curIndex = 23;
             const activeH = arabicHours[curIndex];
 
-            // التزامن التلقائي عند حلول مواعيد الصلاة والمناسبات بدقة
+            // التزامن التلقائي للصلاة والمناسبات عند بدايتها بدقة
             let currentMinute = Math.floor(prog * 60);
             let eventKey = `${activeH.id}-${currentMinute}`;
             if (seconds < 2 && lastTriggeredEvent !== eventKey) {
-                if (activeH.audioType === 'adhan' && currentMinute === 0) {
+                if (activeH.audio && currentMinute === 0) {
                     lastTriggeredEvent = eventKey;
-                    playSystemAudio('adhan');
+                    playAudioDirect(activeH.audio);
                 } else if (activeH.special) {
                     if (currentMinute === 0) {
                         lastTriggeredEvent = eventKey;
-                        playSystemAudio('quran');
+                        playAudioDirect('quranAudio');
                     } else if (currentMinute === 30) {
                         lastTriggeredEvent = eventKey;
-                        playSystemAudio('istighfar');
+                        playAudioDirect('istighfarAudio');
                     }
                 }
             }
