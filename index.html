@@ -90,7 +90,7 @@
             <!-- أوقات الصلاة والمناسبات الروحية -->
             <div class="bg-amber-950/20 p-3 rounded-xl border border-amber-500/30 space-y-2 text-xs">
                 <h3 class="font-bold text-amber-300 text-center border-b border-amber-500/20 pb-1">مواقيت الصلاة والمناسبات الروحية</h3>
-                <div class="flex justify-between items-center"><span class="text-gray-300">🌅 صلاة قرآن الفجر:</span> <span class="font-bold text-emerald-300">ساعة 22</span></div>
+                <div class="flex justify-between items-center"><span class="text-gray-300">🌅 صلاة قرآن الفجر:</span> <span class="font-bold text-emerald-300">نهاية ساعة 22</span></div>
                 <div class="flex justify-between items-center"><span class="text-gray-300">🌙 صلاة غسق الليل:</span> <span class="font-bold text-indigo-300">ساعة 14</span></div>
                 <div class="flex justify-between items-center"><span class="text-gray-300">☀️ صلاة دلوك الشمس:</span> <span class="font-bold text-amber-400">ساعة 6 (الظهيرة)</span></div>
                 <div class="flex justify-between items-center"><span class="text-gray-300">🌌 صلاة الليل:</span> <span class="font-bold text-purple-300">ساعة 20 (البهره)</span></div>
@@ -132,7 +132,7 @@
             { id: 15, name: "العتمه", type: "night" }, { id: 16, name: "السدفة", type: "night" },
             { id: 17, name: "الفحمة", type: "night" }, { id: 18, name: "الزلة", type: "night" },
             { id: 19, name: "الزلفى", type: "night" }, { id: 20, name: "البهره", type: "night", prayer: "صلاة الليل", audio: "adhanAudio" },
-            { id: 21, name: "السحر", type: "night", special: "سورة النصر + الاستغفار" }, { id: 22, name: "الفجر", type: "night", prayer: "صلاة قرآن الفجر", audio: "adhanAudio" },
+            { id: 21, name: "السحر", type: "night", special: "سورة النصر + الاستغفار" }, { id: 22, name: "الفجر", type: "night", prayer: "صلاة قرآن الفجر (نهاية الساعة)", audio: "adhanAudio" },
             { id: 23, name: "الصبح", type: "night" }, { id: 24, name: "الصباح", type: "night" }
         ];
 
@@ -254,14 +254,23 @@
             if (curIndex >= 24) curIndex = 23;
             const activeH = arabicHours[curIndex];
 
-            // التزامن التلقائي للصلاة والمناسبات عند بدايتها بدقة
+            // التزامن التلقائي: الأذان في بداية الساعات المحددة، والفجر في نهاية الساعة 22 (أي عند اكتمال الدقيقة 59 وانتقالها للساعة 23)
             let currentMinute = Math.floor(prog * 60);
             let eventKey = `${activeH.id}-${currentMinute}`;
+            
             if (seconds < 2 && lastTriggeredEvent !== eventKey) {
-                if (activeH.audio && currentMinute === 0) {
+                // للأذان العادي (الساعات 6، 14، 20) عند الدقيقة 0
+                if (activeH.audio && activeH.id !== 22 && currentMinute === 0) {
                     lastTriggeredEvent = eventKey;
                     playAudioDirect(activeH.audio);
-                } else if (activeH.special) {
+                } 
+                // لأذان الفجر في نهاية الساعة 22 (عند بدء الدقيقة 0 من الساعة 23 أي نهاية الـ 22)
+                else if (activeH.id === 23 && currentMinute === 0) {
+                    lastTriggeredEvent = eventKey;
+                    playAudioDirect('adhanAudio');
+                }
+                // للمناسبات في الساعة 21
+                else if (activeH.special) {
                     if (currentMinute === 0) {
                         lastTriggeredEvent = eventKey;
                         playAudioDirect('quranAudio');
