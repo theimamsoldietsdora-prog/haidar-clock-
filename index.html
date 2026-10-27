@@ -76,15 +76,13 @@
                 </select>
             </div>
 
-            <!-- معلومات الفصول والشروق والغروب -->
+            <!-- معلومات الفصول وطول الساعات -->
             <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800 space-y-1.5 text-xs">
                 <div class="flex justify-between"><span class="text-gray-400">التوقيت الفصلي:</span> <span id="seasonName" class="font-bold text-amber-400">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">موعد الشروق اليومي:</span> <span id="sunriseVal" class="font-bold text-amber-300">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">موعد الغروب اليومي:</span> <span id="sunsetVal" class="font-bold text-amber-300">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">ساعات النهار:</span> <span id="dayHoursVal" class="font-bold text-white">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">ساعات الليل:</span> <span id="nightHoursVal" class="font-bold text-white">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">طول ساعة النهار:</span> <span id="dayHourLength" class="font-bold text-emerald-300">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">طول ساعة الليل:</span> <span id="nightHourLength" class="font-bold text-indigo-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">ساعات النهار العربية (12):</span> <span id="dayHoursVal" class="font-bold text-white">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">ساعات الليل العربية (12):</span> <span id="nightHoursVal" class="font-bold text-white">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">طول ساعة النهار الفلكية:</span> <span id="dayHourLength" class="font-bold text-emerald-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">طول ساعة الليل الفلكية:</span> <span id="nightHourLength" class="font-bold text-indigo-300">-</span></div>
             </div>
 
             <!-- أوقات الصلاة والمناسبات الروحية -->
@@ -119,7 +117,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs" id="hoursGrid"></div>
     </footer>
 
-    <!-- البرمجة والخوارزميات التصحيحية الدقيقة -->
+    <!-- البرمجة والخوارزميات المتوافقة مع النظرية النقية -->
     <script>
         const arabicHours = [
             { id: 1, name: "الشروق", type: "day" }, { id: 2, name: "البكور", type: "day" },
@@ -179,39 +177,26 @@
             virtualTime = new Date(document.getElementById('simDateInput').value + "T06:00:00");
         }
 
+        // المعادلة الفلكية البحتة لحساب طول النهار والليل العربية
         function getAstronomicalParameters(date) {
             const startOfYear = new Date(date.getFullYear(), 0, 1);
             const dayOfYear = Math.floor((date - startOfYear) / (1000 * 60 * 60 * 24));
             const angle = (2 * Math.PI * (dayOfYear - 80)) / 365;
             const seasonalFactor = Math.cos(angle); 
-            let dayHours = 12 + 2 * seasonalFactor;
-            let nightHours = 24 - dayHours;
+            
+            let dayHoursCount = 12 + 2 * seasonalFactor;
+            let nightHoursCount = 24 - dayHoursCount;
 
-            let dayHourMinutes = (dayHours / 12) * 60;
-            let nightHourMinutes = (nightHours / 12) * 60;
-
-            let sunriseDecimal = 6 - (seasonalFactor * 0.8);
-            let sunsetDecimal = 18 + (seasonalFactor * 0.8);
-
-            let formatTime = (decimalHours) => {
-                let h = Math.floor(decimalHours);
-                let m = Math.floor((decimalHours - h) * 60);
-                if (h < 0) h += 24;
-                if (h >= 24) h %= 24;
-                return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-            };
+            let dayHourMinutes = (dayHoursCount / 12) * 60;
+            let nightHourMinutes = (nightHoursCount / 12) * 60;
 
             return {
-                dayHours: dayHours,
-                nightHours: nightHours,
-                dayHoursStr: dayHours.toFixed(1),
-                nightHoursStr: nightHours.toFixed(1),
+                dayHours: dayHoursCount,
+                nightHours: nightHoursCount,
+                dayHoursStr: dayHoursCount.toFixed(1),
+                nightHoursStr: nightHoursCount.toFixed(1),
                 dayHourMinutes: dayHourMinutes.toFixed(1),
                 nightHourMinutes: nightHourMinutes.toFixed(1),
-                sunriseStr: formatTime(sunriseDecimal),
-                sunriseDecimal: sunriseDecimal,
-                sunsetStr: formatTime(sunsetDecimal),
-                sunsetDecimal: sunsetDecimal,
                 seasonName: seasonalFactor > 0.5 ? "ذروة الصيف" : (seasonalFactor < -0.5 ? "ذروة الشتاء" : "اعتدال انتقالي")
             };
         }
@@ -232,21 +217,19 @@
 
             const astro = getAstronomicalParameters(now);
             document.getElementById('seasonName').innerText = astro.seasonName;
-            document.getElementById('sunriseVal').innerText = astro.sunriseStr;
-            document.getElementById('sunsetVal').innerText = astro.sunsetStr;
             document.getElementById('dayHoursVal').innerText = `${astro.dayHoursStr} ساعة`;
             document.getElementById('nightHoursVal').innerText = `${astro.nightHoursStr} ساعة`;
-            document.getElementById('dayHourLength').innerText = `${astro.dayHourMinutes} دقيقة`;
-            document.getElementById('nightHourLength').innerText = `${astro.nightHourMinutes} دقيقة`;
+            document.getElementById('dayHourLength').innerText = `${astro.dayHourMinutes} دقيقة فلكية`;
+            document.getElementById('nightHourLength').innerText = `${astro.nightHourMinutes} دقيقة فلكية`;
 
+            // محاكاة ثواني اليوم الحالي للأنظمة التجريبية الفلكية الصرفة
             const currentTotalSecs = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-            const sunriseTotalSecs = astro.sunriseDecimal * 3600;
-
-            let relativeSecs = currentTotalSecs - sunriseTotalSecs;
-            if (relativeSecs < 0) relativeSecs += 86400;
-
             const totalDaySecs = astro.dayHours * 3600;
             const totalNightSecs = astro.nightHours * 3600;
+
+            // افتراض انطلاق دورة الـ 24 ساعة العربية مع الساعة 6:00 صباحاً كمرجعية زمنية افتراضية للشروق في المحاكاة، 
+            // ويمكنك تعديل نقطة البداية المطلقة حسب رغبتك. لنحسب موقع الساعة بدقة تامة من الـ 24 ساعة:
+            let relativeSecs = (currentTotalSecs - (6 * 3600) + 86400) % 86400;
 
             let curIndex = 0, prog = 0, isDaytime = true;
             if (relativeSecs < totalDaySecs) {
@@ -304,37 +287,19 @@
             ctx.fillStyle = bgGrad; ctx.fill();
             ctx.lineWidth = 5; ctx.strokeStyle = '#f59e0b'; ctx.stroke();
 
-            // الشروق والغروب في مركز الساعة
-            ctx.font = 'bold 11px "Cairo", sans-serif'; 
-            ctx.fillStyle = '#34d399'; 
-            ctx.textAlign = 'center';
-            ctx.fillText(`الشروق: ${astro.sunriseStr}`, 0, -32);
-            
-            ctx.fillStyle = '#38bdf8';
-            ctx.fillText(`الغروب: ${astro.sunsetStr}`, 0, -16);
+            // اسم المختع في مركز الساعة
+            ctx.font = 'bold 13px "Cairo", sans-serif'; ctx.fillStyle = '#facc15'; ctx.textAlign = 'center';
+            ctx.fillText("ابتكار واختراع", 0, -8);
+            ctx.font = 'bold 15px "Amiri", serif'; ctx.fillStyle = '#ffffff';
+            ctx.fillText("المهندس حيدر ال عگاب", 0, 14);
 
-            ctx.font = 'bold 12px "Cairo", sans-serif'; ctx.fillStyle = '#facc15';
-            ctx.fillText("ابتكار واختراع", 0, 5);
-            ctx.font = 'bold 13px "Amiri", serif'; ctx.fillStyle = '#ffffff';
-            ctx.fillText("المهندس حيدر ال عگاب", 0, 24);
+            // معادلة توزيع الـ 24 ساعة على محيط الدائرة (15 درجة لكل ساعة تزامناً مع نظامك النقي)
+            const step = (2 * Math.PI) / 24;
 
-            // دالة رياضية لتوزيع زوايا الساعات العريية بشكل نسبي دقيق (النهار 180 درجة لـ 12 ساعة، والليل 180 درجة لـ 12 ساعة)
-            function getHourAngle(index, progress) {
-                let absoluteHour = index + progress;
-                let angle = 0;
-                if (absoluteHour <= 12) {
-                    // ساعات النهار (تأخذ النصف العلوي أو الأيمن حسب التوزيع)
-                    angle = (absoluteHour / 12) * Math.PI - Math.PI / 2;
-                } else {
-                    // ساعات الليل (تأخذ النصف المتبقي)
-                    angle = Math.PI + ((absoluteHour - 12) / 12) * Math.PI - Math.PI / 2;
-                }
-                return angle;
-            }
-
-            // رسم خطوط وتقسيمات الساعات على المحيط بزوايا نسبية دقيقة
+            // رسم تقسيمات الساعات الـ 24 بدقة تامة وبشكل متناسق مع رقم الساعة النصي
             for (let i = 0; i < 24; i++) {
-                const angle = getHourAngle(i, 0);
+                // الساعة 1 تبدأ من الأعلى (-Math.PI / 2) وتتوالى باتجاه عقارب الساعة
+                const angle = (i * step) - Math.PI / 2;
                 const h = arabicHours[i];
                 ctx.save();
                 ctx.rotate(angle);
@@ -351,8 +316,8 @@
                 ctx.restore();
             }
 
-            // ضبط عقرب الساعات بناءً على الموقع النسبي الدقيق
-            const hAngle = getHourAngle(curIndex, prog);
+            // ضبط زاوية عقرب الساعات بدقة مئوية لتتطابق تماماً مع الساعة الحالية المعروضة بالنص أسفل القرص
+            const hAngle = ((curIndex + prog) * step) - Math.PI / 2;
             ctx.save();
             ctx.rotate(hAngle);
             ctx.beginPath(); ctx.moveTo(0, 15); ctx.lineTo(0, -(radius - 140));
