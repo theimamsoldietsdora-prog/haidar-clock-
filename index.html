@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الساعة الفلكية المبتكرة - المهندس حيدر ال عگاب</title>
+    <title>الساعة الفلكية الرقمية - المهندس حيدر ال عگاب</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap');
@@ -15,9 +15,9 @@
         }
         .amiri-font { font-family: 'Amiri', serif; }
         .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
+            background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(245, 158, 11, 0.25);
+            border: 1px solid rgba(245, 158, 11, 0.3);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
         }
         .gold-glow { text-shadow: 0 0 15px rgba(245, 158, 11, 0.6); }
@@ -38,7 +38,7 @@
 
     <!-- رأس الصفحة -->
     <header class="text-center max-w-4xl mx-auto mb-4 space-y-2">
-        <h1 class="text-3xl md:text-5xl font-bold amiri-font text-amber-400 gold-glow mb-1">الساعة الفلكية المبتكرة</h1>
+        <h1 class="text-3xl md:text-5xl font-bold amiri-font text-amber-400 gold-glow mb-1">الساعة الفلكية الرقمية</h1>
         <p class="text-xs md:text-sm text-gray-300">التوقيت الزماني المتغير المستقل عن التوقيت العالمي (ساعات النهار والليل العربية)</p>
         <div class="text-xs text-amber-300 font-semibold tracking-wider">اختراع وابتكار: المهندس حيدر ال عگاب</div>
         <div class="pt-2 flex flex-wrap justify-center gap-2">
@@ -49,10 +49,10 @@
     </header>
 
     <!-- المحتوى الرئيسي -->
-    <main class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <main class="max-w-4xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         
         <!-- لوحة التحكم والمحاكاة -->
-        <section class="lg:col-span-4 glass-panel p-4 md:p-5 rounded-2xl space-y-4">
+        <section class="glass-panel p-4 md:p-5 rounded-2xl space-y-4">
             <h2 class="text-lg font-bold text-amber-300 border-b border-gray-700 pb-2">إعدادات المحاكاة والفصول</h2>
             
             <div class="grid grid-cols-2 gap-2">
@@ -76,48 +76,52 @@
                 </select>
             </div>
 
-            <!-- معلومات الفصول وطول الساعات -->
+            <!-- معلومات الفصول والشروق والغروب -->
             <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800 space-y-1.5 text-xs">
                 <div class="flex justify-between"><span class="text-gray-400">التوقيت الفصلي:</span> <span id="seasonName" class="font-bold text-amber-400">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">ساعات النهار العربية (12):</span> <span id="dayHoursVal" class="font-bold text-white">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">ساعات الليل العربية (12):</span> <span id="nightHoursVal" class="font-bold text-white">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">طول ساعة النهار الفلكية:</span> <span id="dayHourLength" class="font-bold text-emerald-300">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">طول ساعة الليل الفلكية:</span> <span id="nightHourLength" class="font-bold text-indigo-300">-</span></div>
-            </div>
-
-            <!-- أوقات الصلاة والمناسبات الروحية -->
-            <div class="bg-amber-950/20 p-3 rounded-xl border border-amber-500/30 space-y-2 text-xs">
-                <h3 class="font-bold text-amber-300 text-center border-b border-amber-500/20 pb-1">مواقيت الصلاة والمناسبات الروحية</h3>
-                <div class="flex justify-between items-center"><span class="text-gray-300">🌅 صلاة قرآن الفجر:</span> <span class="font-bold text-emerald-300">نهاية ساعة 22</span></div>
-                <div class="flex justify-between items-center"><span class="text-gray-300">🌙 صلاة غسق الليل:</span> <span class="font-bold text-indigo-300">ساعة 14</span></div>
-                <div class="flex justify-between items-center"><span class="text-gray-300">☀️ صلاة دلوك الشمس:</span> <span class="font-bold text-amber-400">ساعة 6 (الظهيرة)</span></div>
-                <div class="flex justify-between items-center"><span class="text-gray-300">🌌 صلاة الليل:</span> <span class="font-bold text-purple-300">ساعة 20 (البهره)</span></div>
-                <div class="flex justify-between items-center"><span class="text-gray-300">📖 قراءة سورة النصر:</span> <span class="font-bold text-amber-200">ساعة 21 (بدء السحر)</span></div>
-                <div class="flex justify-between items-center"><span class="text-gray-300">📿 ساعة الاستغفار:</span> <span class="font-bold text-blue-300">ساعة 21 (منتصف السحر)</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">موعد الشروق اليومي:</span> <span id="sunriseVal" class="font-bold text-emerald-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">موعد الغروب اليومي:</span> <span id="sunsetVal" class="font-bold text-sky-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">ساعات النهار (12):</span> <span id="dayHoursVal" class="font-bold text-white">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">ساعات الليل (12):</span> <span id="nightHoursVal" class="font-bold text-white">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">طول ساعة النهار:</span> <span id="dayHourLength" class="font-bold text-emerald-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">طول ساعة الليل:</span> <span id="nightHourLength" class="font-bold text-indigo-300">-</span></div>
             </div>
         </section>
 
-        <!-- الساعة التناظرية الفلكية (Canvas) -->
-        <section class="lg:col-span-8 flex flex-col items-center justify-center glass-panel p-5 rounded-2xl">
-            <div class="relative w-full max-w-[460px] aspect-square flex items-center justify-center">
-                <canvas id="clockCanvas" width="600" height="600" class="w-full h-full drop-shadow-2xl"></canvas>
+        <!-- الشاشة الرقمية المركزية -->
+        <section class="glass-panel p-6 rounded-2xl flex flex-col items-center justify-center text-center space-y-4">
+            <div class="space-y-1">
+                <span class="text-xs text-amber-400 font-semibold tracking-wider">الساعة العربية الحالية</span>
+                <div id="currentHourName" class="text-3xl md:text-4xl font-bold amiri-font text-amber-300 gold-glow">الشروق</div>
             </div>
-            <div class="mt-4 text-center space-y-1">
-                <div id="currentHourName" class="text-xl md:text-2xl font-bold amiri-font text-amber-400">الشروق</div>
-                <div id="currentDetailedTime" class="text-sm text-gray-300 font-mono">الساعة 01 | الدقيقة 00 | الثانية 00</div>
-                <div id="periodIndicator" class="text-[11px] px-3 py-0.5 bg-amber-500/20 text-amber-300 rounded-full inline-block mt-1">فترة النهار العربي</div>
+
+            <div class="bg-gray-900/90 border border-amber-500/30 px-6 py-4 rounded-xl w-full space-y-2">
+                <div id="currentHourNumber" class="text-xl font-bold text-white">الساعة 1</div>
+                <div id="currentDetailedTime" class="text-sm text-amber-200 font-mono">الدقيقة 00 | الثانية 00</div>
+                <div id="periodIndicator" class="text-xs px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full inline-block">فترة النهار العربي</div>
+            </div>
+
+            <!-- أوقات الصلاة والمناسبات -->
+            <div class="w-full bg-amber-950/20 p-3 rounded-xl border border-amber-500/30 text-right space-y-1.5 text-xs">
+                <div class="font-bold text-amber-300 border-b border-amber-500/20 pb-1 mb-1 text-center">المواعيد التلقائية للتنبيهات</div>
+                <div class="flex justify-between"><span class="text-gray-300">🌅 صلاة قرآن الفجر:</span> <span class="font-bold text-emerald-300">نهاية ساعة 22</span></div>
+                <div class="flex justify-between"><span class="text-gray-300">🌙 صلاة غسق الليل:</span> <span class="font-bold text-indigo-300">ساعة 14</span></div>
+                <div class="flex justify-between"><span class="text-gray-300">☀️ صلاة دلوك الشمس:</span> <span class="font-bold text-amber-400">ساعة 6 (الظهيرة)</span></div>
+                <div class="flex justify-between"><span class="text-gray-300">🌌 صلاة الليل:</span> <span class="font-bold text-purple-300">ساعة 20 (البهره)</span></div>
+                <div class="flex justify-between"><span class="text-gray-300">📖 قراءة سورة النصر:</span> <span class="font-bold text-amber-200">ساعة 21 (بدء السحر)</span></div>
+                <div class="flex justify-between"><span class="text-gray-300">📿 ساعة الاستغفار:</span> <span class="font-bold text-blue-300">ساعة 21 (منتصف السحر)</span></div>
             </div>
         </section>
 
     </main>
 
     <!-- جدول الساعات الـ 24 -->
-    <footer class="max-w-6xl mx-auto w-full mt-6 glass-panel p-4 rounded-2xl">
+    <footer class="max-w-4xl mx-auto w-full mt-6 glass-panel p-4 rounded-2xl">
         <h3 class="text-sm font-bold text-amber-300 mb-2 text-center">ساعات النهار والليل العربية الـ 24 المتسلسلة</h3>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs" id="hoursGrid"></div>
     </footer>
 
-    <!-- البرمجة والخوارزميات الهندسية المطابقة 100% لنظامك المتغير -->
+    <!-- البرمجة والخوارزميات الرقمية البحتة -->
     <script>
         const arabicHours = [
             { id: 1, name: "الشروق", type: "day" }, { id: 2, name: "البكور", type: "day" },
@@ -189,6 +193,17 @@
             let dayHourMinutes = (dayHoursCount / 12) * 60;
             let nightHourMinutes = (nightHoursCount / 12) * 60;
 
+            let sunriseDecimal = 6 - (seasonalFactor * 0.8);
+            let sunsetDecimal = 18 + (seasonalFactor * 0.8);
+
+            let formatTime = (decimalHours) => {
+                let h = Math.floor(decimalHours);
+                let m = Math.floor((decimalHours - h) * 60);
+                if (h < 0) h += 24;
+                if (h >= 24) h %= 24;
+                return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+            };
+
             return {
                 dayHours: dayHoursCount,
                 nightHours: nightHoursCount,
@@ -196,33 +211,15 @@
                 nightHoursStr: nightHoursCount.toFixed(1),
                 dayHourMinutes: dayHourMinutes.toFixed(1),
                 nightHourMinutes: nightHourMinutes.toFixed(1),
+                sunriseStr: formatTime(sunriseDecimal),
+                sunriseDecimal: sunriseDecimal,
+                sunsetStr: formatTime(sunsetDecimal),
+                sunsetDecimal: sunsetDecimal,
                 seasonName: seasonalFactor > 0.5 ? "ذروة الصيف" : (seasonalFactor < -0.5 ? "ذروة الشتاء" : "اعتدال انتقالي")
             };
         }
 
-        const canvas = document.getElementById('clockCanvas');
-        const ctx = canvas.getContext('2d');
-
-        // دالة هندسية لحساب زاوية أي ساعة (من 1 إلى 24) بناءً على أطوال النهار والليل المتغيرة بدقة
-        function getPreciseAngle(hourId, progress) {
-            // hourId من 1 إلى 24. نريد تحويلها إلى زاوية على الدائرة
-            // ساعات النهار (1 إلى 12) توزع على النصف الأيمن أو العلوي، وساعات الليل (13 إلى 24) توزع على النصف الآخر
-            let absIndex = hourId - 1 + progress;
-            let angle = 0;
-            if (absIndex < 12) {
-                // نهارية: كل ساعة تأخذ حصة من الـ 180 درجة الأولى
-                angle = (absIndex / 12) * Math.PI - Math.PI / 2;
-            } else {
-                // ليلية: كل ساعة تأخذ حصة من الـ 180 درجة المتبقية
-                angle = Math.PI + ((absIndex - 12) / 12) * Math.PI - Math.PI / 2;
-            }
-            return angle;
-        }
-
-        function drawClock() {
-            const width = canvas.width, height = canvas.height, radius = width / 2;
-            ctx.clearRect(0, 0, width, height);
-
+        function updateDigitalClock() {
             let now = new Date();
             if (isSimulation) {
                 const speed = parseFloat(document.getElementById('simSpeed').value) || 1;
@@ -232,16 +229,21 @@
 
             const astro = getAstronomicalParameters(now);
             document.getElementById('seasonName').innerText = astro.seasonName;
+            document.getElementById('sunriseVal').innerText = astro.sunriseStr;
+            document.getElementById('sunsetVal').innerText = astro.sunsetStr;
             document.getElementById('dayHoursVal').innerText = `${astro.dayHoursStr} ساعة`;
             document.getElementById('nightHoursVal').innerText = `${astro.nightHoursStr} ساعة`;
-            document.getElementById('dayHourLength').innerText = `${astro.dayHourMinutes} دقيقة فلكية`;
-            document.getElementById('nightHourLength').innerText = `${astro.nightHourMinutes} دقيقة فلكية`;
+            document.getElementById('dayHourLength').innerText = `${astro.dayHourMinutes} دقيقة`;
+            document.getElementById('nightHourLength').innerText = `${astro.nightHourMinutes} دقيقة`;
 
             const currentTotalSecs = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+            const sunriseTotalSecs = astro.sunriseDecimal * 3600;
+
+            let relativeSecs = currentTotalSecs - sunriseTotalSecs;
+            if (relativeSecs < 0) relativeSecs += 86400;
+
             const totalDaySecs = astro.dayHours * 3600;
             const totalNightSecs = astro.nightHours * 3600;
-
-            let relativeSecs = (currentTotalSecs - (6 * 3600) + 86400) % 86400;
 
             let curIndex = 0, prog = 0, isDaytime = true;
             if (relativeSecs < totalDaySecs) {
@@ -282,78 +284,17 @@
             }
 
             document.getElementById('currentHourName').innerText = activeH.name + (activeH.prayer ? ` (${activeH.prayer})` : (activeH.special ? ` (${activeH.special})` : ''));
-            document.getElementById('currentDetailedTime').innerText = `الساعة ${activeH.id} | الدقيقة ${currentMinute} | الثانية ${now.getSeconds()}`;
+            document.getElementById('currentHourNumber').innerText = `الساعة ${activeH.id} (${activeH.name})`;
+            document.getElementById('currentDetailedTime').innerText = `الدقيقة ${currentMinute} | الثانية ${now.getSeconds()}`;
             document.getElementById('periodIndicator').innerText = isDaytime ? "فترة النهار العربي" : "فترة الليل العربي";
 
             document.querySelectorAll('[id^="hour-card-"]').forEach(el => el.classList.remove('ring-2', 'ring-amber-400', 'bg-amber-900/60'));
             const activeCard = document.getElementById(`hour-card-${activeH.id}`);
             if (activeCard) activeCard.classList.add('ring-2', 'ring-amber-400', 'bg-amber-900/60');
-
-            ctx.save();
-            ctx.translate(radius, radius);
-
-            ctx.beginPath();
-            ctx.arc(0, 0, radius - 15, 0, 2 * Math.PI);
-            const bgGrad = ctx.createRadialGradient(0, 0, 50, 0, 0, radius);
-            bgGrad.addColorStop(0, '#0f172a'); bgGrad.addColorStop(1, '#020617');
-            ctx.fillStyle = bgGrad; ctx.fill();
-            ctx.lineWidth = 5; ctx.strokeStyle = '#f59e0b'; ctx.stroke();
-
-            // اسم المبتكر في مركز الساعة
-            ctx.font = 'bold 13px "Cairo", sans-serif'; ctx.fillStyle = '#facc15'; ctx.textAlign = 'center';
-            ctx.fillText("ابتكار واختراع", 0, -8);
-            ctx.font = 'bold 15px "Amiri", serif'; ctx.fillStyle = '#ffffff';
-            ctx.fillText("المهندس حيدر ال عگاب", 0, 14);
-
-            // رسم تقسيمات الساعات الـ 24 بالزوايا الدقيقة المنسجمة مع نظامك المتغير
-            for (let i = 0; i < 24; i++) {
-                const angle = getPreciseAngle(i + 1, 0);
-                const h = arabicHours[i];
-                ctx.save();
-                ctx.rotate(angle);
-                ctx.beginPath(); ctx.moveTo(radius - 65, 0); ctx.lineTo(radius - 20, 0);
-                ctx.strokeStyle = h.prayer || h.special ? '#10b981' : (h.type === 'day' ? 'rgba(245, 158, 11, 0.4)' : 'rgba(99, 102, 241, 0.4)');
-                ctx.lineWidth = h.prayer || h.special ? 3 : 1.5; ctx.stroke();
-                
-                ctx.rotate(Math.PI / 2);
-                ctx.font = 'bold 11px "Cairo", sans-serif';
-                ctx.fillStyle = h.prayer || h.special ? '#34d399' : '#38bdf8';
-                ctx.fillText(h.id.toString(), 0, -(radius - 32));
-                ctx.fillStyle = (i === curIndex) ? '#facc15' : (h.prayer || h.special ? '#34d399' : '#9ca3af');
-                ctx.fillText(h.name, 0, -(radius - 85));
-                ctx.restore();
-            }
-
-            // ضبط زاوية عقرب الساعات ليتطابق مئويةً وبدقة تامة مع الساعة الحالية والنص الرقمي السفلي
-            const hAngle = getPreciseAngle(activeH.id, prog);
-            ctx.save();
-            ctx.rotate(hAngle);
-            ctx.beginPath(); ctx.moveTo(0, 15); ctx.lineTo(0, -(radius - 140));
-            ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.stroke();
-            ctx.restore();
-
-            // عقرب الدقائق الفلكية
-            const minAngle = (prog * 2 * Math.PI) - Math.PI / 2;
-            ctx.save();
-            ctx.rotate(minAngle);
-            ctx.beginPath(); ctx.moveTo(0, 20); ctx.lineTo(0, -(radius - 100));
-            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3.5; ctx.lineCap = 'round'; ctx.stroke();
-            ctx.restore();
-
-            // عقرب الثواني
-            const secAngle = ((now.getSeconds() / 60) * 2 * Math.PI) - Math.PI / 2;
-            ctx.save();
-            ctx.rotate(secAngle);
-            ctx.beginPath(); ctx.moveTo(0, 25); ctx.lineTo(0, -(radius - 75));
-            ctx.strokeStyle = '#fde047'; ctx.lineWidth = 1.5; ctx.stroke();
-            ctx.restore();
-
-            ctx.beginPath(); ctx.arc(0, 0, 6, 0, 2 * Math.PI); ctx.fillStyle = '#f59e0b'; ctx.fill();
-            ctx.restore();
         }
 
-        setInterval(drawClock, 100);
-        drawClock();
+        setInterval(updateDigitalClock, 1000);
+        updateDigitalClock();
     </script>
 </body>
 </html>
