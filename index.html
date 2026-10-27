@@ -79,8 +79,8 @@
             <!-- معلومات الفصول والشروق والغروب -->
             <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800 space-y-1.5 text-xs">
                 <div class="flex justify-between"><span class="text-gray-400">التوقيت الفصلي:</span> <span id="seasonName" class="font-bold text-amber-400">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">موعد الشروق:</span> <span id="sunriseVal" class="font-bold text-amber-300">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">موعد الغروب:</span> <span id="sunsetVal" class="font-bold text-amber-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">موعد الشروق اليومي:</span> <span id="sunriseVal" class="font-bold text-amber-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">موعد الغروب اليومي:</span> <span id="sunsetVal" class="font-bold text-amber-300">-</span></div>
                 <div class="flex justify-between"><span class="text-gray-400">ساعات النهار:</span> <span id="dayHoursVal" class="font-bold text-white">-</span></div>
                 <div class="flex justify-between"><span class="text-gray-400">ساعات الليل:</span> <span id="nightHoursVal" class="font-bold text-white">-</span></div>
                 <div class="flex justify-between"><span class="text-gray-400">طول ساعة النهار:</span> <span id="dayHourLength" class="font-bold text-emerald-300">-</span></div>
@@ -137,7 +137,6 @@
         ];
 
         let isSimulation = false;
-        let simDate = new Date();
         let virtualTime = new Date();
         let lastTriggeredEvent = "";
 
@@ -191,6 +190,9 @@
             let dayHourMinutes = (dayHours / 12) * 60;
             let nightHourMinutes = (nightHours / 12) * 60;
 
+            let sunriseDecimal = 6 - (seasonalFactor * 0.8);
+            let sunsetDecimal = 18 + (seasonalFactor * 0.8);
+
             let formatTime = (decimalHours) => {
                 let h = Math.floor(decimalHours);
                 let m = Math.floor((decimalHours - h) * 60);
@@ -204,8 +206,10 @@
                 nightHours: nightHours.toFixed(1),
                 dayHourMinutes: dayHourMinutes.toFixed(1),
                 nightHourMinutes: nightHourMinutes.toFixed(1),
-                sunriseStr: formatTime(6 - (seasonalFactor * 0.8)),
-                sunsetStr: formatTime(18 + (seasonalFactor * 0.8)),
+                sunriseStr: formatTime(sunriseDecimal),
+                sunriseDecimal: sunriseDecimal,
+                sunsetStr: formatTime(sunsetDecimal),
+                sunsetDecimal: sunsetDecimal,
                 seasonName: seasonalFactor > 0.5 ? "ذروة الصيف" : (seasonalFactor < -0.5 ? "ذروة الشتاء" : "اعتدال انتقالي")
             };
         }
@@ -233,44 +237,44 @@
             document.getElementById('dayHourLength').innerText = `${astro.dayHourMinutes} دقيقة`;
             document.getElementById('nightHourLength').innerText = `${astro.nightHourMinutes} دقيقة`;
 
-            const hours = now.getHours(), minutes = now.getMinutes(), seconds = now.getSeconds();
-            const totalSecs = ((hours - 6) * 3600 + minutes * 60 + seconds + 86400) % 86400;
+            // حساب الوقت الفلكي الفعلي الدقيق بدءاً من وقت الشروق المتغير
+            const currentTotalSecs = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+            const sunriseTotalSecs = astro.sunriseDecimal * 3600;
+
+            let relativeSecs = currentTotalSecs - sunriseTotalSecs;
+            if (relativeSecs < 0) relativeSecs += 86400;
+
             const totalDaySecs = parseFloat(astro.dayHours) * 3600;
             const totalNightSecs = 86400 - totalDaySecs;
 
             let curIndex = 0, prog = 0, isDaytime = true;
-            if (totalSecs < totalDaySecs) {
+            if (relativeSecs < totalDaySecs) {
                 isDaytime = true;
                 const secH = totalDaySecs / 12;
-                curIndex = Math.floor(totalSecs / secH);
-                prog = (totalSecs % secH) / secH;
+                curIndex = Math.floor(relativeSecs / secH);
+                prog = (relativeSecs % secH) / secH;
             } else {
                 isDaytime = false;
                 const secN = totalNightSecs / 12;
-                curIndex = 12 + Math.floor((totalSecs - totalDaySecs) / secN);
-                prog = ((totalSecs - totalDaySecs) % secN) / secN;
+                curIndex = 12 + Math.floor((relativeSecs - totalDaySecs) / secN);
+                prog = ((relativeSecs - totalDaySecs) % secN) / secN;
             }
 
             if (curIndex >= 24) curIndex = 23;
             const activeH = arabicHours[curIndex];
 
-            // التزامن التلقائي: الأذان في بداية الساعات المحددة، والفجر في نهاية الساعة 22 (أي عند اكتمال الدقيقة 59 وانتقالها للساعة 23)
+            // التزامن التلقائي للصوت
             let currentMinute = Math.floor(prog * 60);
             let eventKey = `${activeH.id}-${currentMinute}`;
             
-            if (seconds < 2 && lastTriggeredEvent !== eventKey) {
-                // للأذان العادي (الساعات 6، 14، 20) عند الدقيقة 0
+            if (now.getSeconds() < 2 && lastTriggeredEvent !== eventKey) {
                 if (activeH.audio && activeH.id !== 22 && currentMinute === 0) {
                     lastTriggeredEvent = eventKey;
                     playAudioDirect(activeH.audio);
-                } 
-                // لأذان الفجر في نهاية الساعة 22 (عند بدء الدقيقة 0 من الساعة 23 أي نهاية الـ 22)
-                else if (activeH.id === 23 && currentMinute === 0) {
+                } else if (activeH.id === 23 && currentMinute === 0) {
                     lastTriggeredEvent = eventKey;
                     playAudioDirect('adhanAudio');
-                }
-                // للمناسبات في الساعة 21
-                else if (activeH.special) {
+                } else if (activeH.special) {
                     if (currentMinute === 0) {
                         lastTriggeredEvent = eventKey;
                         playAudioDirect('quranAudio');
@@ -282,7 +286,7 @@
             }
 
             document.getElementById('currentHourName').innerText = activeH.name + (activeH.prayer ? ` (${activeH.prayer})` : (activeH.special ? ` (${activeH.special})` : ''));
-            document.getElementById('currentDetailedTime').innerText = `الساعة ${activeH.id} | الدقيقة ${currentMinute} | الثانية ${seconds}`;
+            document.getElementById('currentDetailedTime').innerText = `الساعة ${activeH.id} | الدقيقة ${currentMinute} | الثانية ${now.getSeconds()}`;
             document.getElementById('periodIndicator').innerText = isDaytime ? "فترة النهار العربي" : "فترة الليل العربي";
 
             document.querySelectorAll('[id^="hour-card-"]').forEach(el => el.classList.remove('ring-2', 'ring-amber-400', 'bg-amber-900/60'));
@@ -299,12 +303,23 @@
             ctx.fillStyle = bgGrad; ctx.fill();
             ctx.lineWidth = 5; ctx.strokeStyle = '#f59e0b'; ctx.stroke();
 
-            ctx.font = 'bold 12px "Cairo", sans-serif'; ctx.fillStyle = '#facc15'; ctx.textAlign = 'center';
-            ctx.fillText("ابتكار واختراع", 0, -22);
-            ctx.font = 'bold 14px "Amiri", serif'; ctx.fillStyle = '#ffffff';
-            ctx.fillText("المهندس حيدر ال عگاب", 0, 2);
+            // الشروق والغروب في مركز الساعة
+            ctx.font = 'bold 11px "Cairo", sans-serif'; 
+            ctx.fillStyle = '#34d399'; 
+            ctx.textAlign = 'center';
+            ctx.fillText(`الشروق: ${astro.sunriseStr}`, 0, -32);
+            
+            ctx.fillStyle = '#38bdf8';
+            ctx.fillText(`الغروب: ${astro.sunsetStr}`, 0, -16);
+
+            ctx.font = 'bold 12px "Cairo", sans-serif'; ctx.fillStyle = '#facc15';
+            ctx.fillText("ابتكار واختراع", 0, 5);
+            ctx.font = 'bold 13px "Amiri", serif'; ctx.fillStyle = '#ffffff';
+            ctx.fillText("المهندس حيدر ال عگاب", 0, 24);
 
             const step = (2 * Math.PI) / 24;
+            
+            // رسم خطوط وتقسيمات الساعات على المحيط
             for (let i = 0; i < 24; i++) {
                 const angle = i * step - Math.PI / 2;
                 const h = arabicHours[i];
@@ -323,7 +338,7 @@
                 ctx.restore();
             }
 
-            // العقارب الثلاثة الذهبية الملكية
+            // ضبط اتجاه عقرب الساعات المطابق تماماً لرقم ولقب الساعة المعروضة بالنص
             const hAngle = ((curIndex + prog) * step) - Math.PI / 2;
             ctx.save();
             ctx.rotate(hAngle);
@@ -331,6 +346,7 @@
             ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.stroke();
             ctx.restore();
 
+            // ضبط عقرب الدقائق الفلكية
             const minAngle = (prog * 2 * Math.PI) - Math.PI / 2;
             ctx.save();
             ctx.rotate(minAngle);
@@ -338,14 +354,15 @@
             ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3.5; ctx.lineCap = 'round'; ctx.stroke();
             ctx.restore();
 
-            const secAngle = ((seconds / 60) * 2 * Math.PI) - Math.PI / 2;
+            // ضبط عقرب الثواني
+            const secAngle = ((now.getSeconds() / 60) * 2 * Math.PI) - Math.PI / 2;
             ctx.save();
             ctx.rotate(secAngle);
             ctx.beginPath(); ctx.moveTo(0, 25); ctx.lineTo(0, -(radius - 75));
             ctx.strokeStyle = '#fde047'; ctx.lineWidth = 1.5; ctx.stroke();
             ctx.restore();
 
-            ctx.beginPath(); ctx.arc(0, 0, 7, 0, 2 * Math.PI); ctx.fillStyle = '#f59e0b'; ctx.fill();
+            ctx.beginPath(); ctx.arc(0, 0, 6, 0, 2 * Math.PI); ctx.fillStyle = '#f59e0b'; ctx.fill();
             ctx.restore();
         }
 
