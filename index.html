@@ -119,7 +119,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs" id="hoursGrid"></div>
     </footer>
 
-    <!-- البرمجة والخوارزميات -->
+    <!-- البرمجة والخوارزميات التصحيحية الدقيقة -->
     <script>
         const arabicHours = [
             { id: 1, name: "الشروق", type: "day" }, { id: 2, name: "البكور", type: "day" },
@@ -202,8 +202,10 @@
             };
 
             return {
-                dayHours: dayHours.toFixed(1),
-                nightHours: nightHours.toFixed(1),
+                dayHours: dayHours,
+                nightHours: nightHours,
+                dayHoursStr: dayHours.toFixed(1),
+                nightHoursStr: nightHours.toFixed(1),
                 dayHourMinutes: dayHourMinutes.toFixed(1),
                 nightHourMinutes: nightHourMinutes.toFixed(1),
                 sunriseStr: formatTime(sunriseDecimal),
@@ -232,20 +234,19 @@
             document.getElementById('seasonName').innerText = astro.seasonName;
             document.getElementById('sunriseVal').innerText = astro.sunriseStr;
             document.getElementById('sunsetVal').innerText = astro.sunsetStr;
-            document.getElementById('dayHoursVal').innerText = `${astro.dayHours} ساعة`;
-            document.getElementById('nightHoursVal').innerText = `${astro.nightHours} ساعة`;
+            document.getElementById('dayHoursVal').innerText = `${astro.dayHoursStr} ساعة`;
+            document.getElementById('nightHoursVal').innerText = `${astro.nightHoursStr} ساعة`;
             document.getElementById('dayHourLength').innerText = `${astro.dayHourMinutes} دقيقة`;
             document.getElementById('nightHourLength').innerText = `${astro.nightHourMinutes} دقيقة`;
 
-            // حساب الوقت الفلكي الفعلي الدقيق بدءاً من وقت الشروق المتغير
             const currentTotalSecs = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
             const sunriseTotalSecs = astro.sunriseDecimal * 3600;
 
             let relativeSecs = currentTotalSecs - sunriseTotalSecs;
             if (relativeSecs < 0) relativeSecs += 86400;
 
-            const totalDaySecs = parseFloat(astro.dayHours) * 3600;
-            const totalNightSecs = 86400 - totalDaySecs;
+            const totalDaySecs = astro.dayHours * 3600;
+            const totalNightSecs = astro.nightHours * 3600;
 
             let curIndex = 0, prog = 0, isDaytime = true;
             if (relativeSecs < totalDaySecs) {
@@ -317,11 +318,23 @@
             ctx.font = 'bold 13px "Amiri", serif'; ctx.fillStyle = '#ffffff';
             ctx.fillText("المهندس حيدر ال عگاب", 0, 24);
 
-            const step = (2 * Math.PI) / 24;
-            
-            // رسم خطوط وتقسيمات الساعات على المحيط
+            // دالة رياضية لتوزيع زوايا الساعات العريية بشكل نسبي دقيق (النهار 180 درجة لـ 12 ساعة، والليل 180 درجة لـ 12 ساعة)
+            function getHourAngle(index, progress) {
+                let absoluteHour = index + progress;
+                let angle = 0;
+                if (absoluteHour <= 12) {
+                    // ساعات النهار (تأخذ النصف العلوي أو الأيمن حسب التوزيع)
+                    angle = (absoluteHour / 12) * Math.PI - Math.PI / 2;
+                } else {
+                    // ساعات الليل (تأخذ النصف المتبقي)
+                    angle = Math.PI + ((absoluteHour - 12) / 12) * Math.PI - Math.PI / 2;
+                }
+                return angle;
+            }
+
+            // رسم خطوط وتقسيمات الساعات على المحيط بزوايا نسبية دقيقة
             for (let i = 0; i < 24; i++) {
-                const angle = i * step - Math.PI / 2;
+                const angle = getHourAngle(i, 0);
                 const h = arabicHours[i];
                 ctx.save();
                 ctx.rotate(angle);
@@ -338,8 +351,8 @@
                 ctx.restore();
             }
 
-            // ضبط اتجاه عقرب الساعات المطابق تماماً لرقم ولقب الساعة المعروضة بالنص
-            const hAngle = ((curIndex + prog) * step) - Math.PI / 2;
+            // ضبط عقرب الساعات بناءً على الموقع النسبي الدقيق
+            const hAngle = getHourAngle(curIndex, prog);
             ctx.save();
             ctx.rotate(hAngle);
             ctx.beginPath(); ctx.moveTo(0, 15); ctx.lineTo(0, -(radius - 140));
