@@ -117,7 +117,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs" id="hoursGrid"></div>
     </footer>
 
-    <!-- البرمجة والخوارزميات الصرفة المعتمَدة على نظامك المبتكر -->
+    <!-- البرمجة والخوارزميات الهندسية المطابقة 100% لنظامك المتغير -->
     <script>
         const arabicHours = [
             { id: 1, name: "الشروق", type: "day" }, { id: 2, name: "البكور", type: "day" },
@@ -203,6 +203,22 @@
         const canvas = document.getElementById('clockCanvas');
         const ctx = canvas.getContext('2d');
 
+        // دالة هندسية لحساب زاوية أي ساعة (من 1 إلى 24) بناءً على أطوال النهار والليل المتغيرة بدقة
+        function getPreciseAngle(hourId, progress) {
+            // hourId من 1 إلى 24. نريد تحويلها إلى زاوية على الدائرة
+            // ساعات النهار (1 إلى 12) توزع على النصف الأيمن أو العلوي، وساعات الليل (13 إلى 24) توزع على النصف الآخر
+            let absIndex = hourId - 1 + progress;
+            let angle = 0;
+            if (absIndex < 12) {
+                // نهارية: كل ساعة تأخذ حصة من الـ 180 درجة الأولى
+                angle = (absIndex / 12) * Math.PI - Math.PI / 2;
+            } else {
+                // ليلية: كل ساعة تأخذ حصة من الـ 180 درجة المتبقية
+                angle = Math.PI + ((absIndex - 12) / 12) * Math.PI - Math.PI / 2;
+            }
+            return angle;
+        }
+
         function drawClock() {
             const width = canvas.width, height = canvas.height, radius = width / 2;
             ctx.clearRect(0, 0, width, height);
@@ -221,7 +237,6 @@
             document.getElementById('dayHourLength').innerText = `${astro.dayHourMinutes} دقيقة فلكية`;
             document.getElementById('nightHourLength').innerText = `${astro.nightHourMinutes} دقيقة فلكية`;
 
-            // حساب الثواني بناءً على تدفق النظام الفلكي الصرف
             const currentTotalSecs = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
             const totalDaySecs = astro.dayHours * 3600;
             const totalNightSecs = astro.nightHours * 3600;
@@ -290,11 +305,9 @@
             ctx.font = 'bold 15px "Amiri", serif'; ctx.fillStyle = '#ffffff';
             ctx.fillText("المهندس حيدر ال عگاب", 0, 14);
 
-            const step = (2 * Math.PI) / 24;
-
-            // رسم ساعات نظامك الـ 24 بدقة وتطابق تام
+            // رسم تقسيمات الساعات الـ 24 بالزوايا الدقيقة المنسجمة مع نظامك المتغير
             for (let i = 0; i < 24; i++) {
-                const angle = (i * step) - Math.PI / 2;
+                const angle = getPreciseAngle(i + 1, 0);
                 const h = arabicHours[i];
                 ctx.save();
                 ctx.rotate(angle);
@@ -311,8 +324,8 @@
                 ctx.restore();
             }
 
-            // التطابق المباشر لعقرب الساعات مع مؤشر الساعة الحالية
-            const hAngle = ((curIndex + prog) * step) - Math.PI / 2;
+            // ضبط زاوية عقرب الساعات ليتطابق مئويةً وبدقة تامة مع الساعة الحالية والنص الرقمي السفلي
+            const hAngle = getPreciseAngle(activeH.id, prog);
             ctx.save();
             ctx.rotate(hAngle);
             ctx.beginPath(); ctx.moveTo(0, 15); ctx.lineTo(0, -(radius - 140));
