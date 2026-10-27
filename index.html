@@ -39,7 +39,7 @@
     <!-- رأس الصفحة -->
     <header class="text-center max-w-4xl mx-auto mb-4 space-y-2">
         <h1 class="text-3xl md:text-5xl font-bold amiri-font text-amber-400 gold-glow mb-1">الساعة الفلكية النقية</h1>
-        <p class="text-xs md:text-sm text-gray-300">التوقيت الزماني المستقل تماماً عن التوقيت الستيني (ساعات النهار والليل العربية)</p>
+        <p class="text-xs md:text-sm text-gray-300">التوقيت الزماني المستقل تماماً (ساعات النهار والليل العربية)</p>
         <div class="text-xs text-amber-300 font-semibold tracking-wider">اختراع وابتكار: المهندس حيدر ال عگاب</div>
         <div class="pt-2 flex flex-wrap justify-center gap-2">
             <button onclick="playAudioDirect('adhanAudio')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">🔊 تجربة الأذان</button>
@@ -78,10 +78,10 @@
             <!-- معطيات النظام النقي -->
             <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800 space-y-1.5 text-xs">
                 <div class="flex justify-between"><span class="text-gray-400">الحالة الفصلية:</span> <span id="seasonName" class="font-bold text-amber-400">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">ساعات النهار (12 ساعة):</span> <span id="dayHoursVal" class="font-bold text-white">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">ساعات الليل (12 ساعة):</span> <span id="nightHoursVal" class="font-bold text-white">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">طول ساعة النهار الفلكية:</span> <span id="dayHourLength" class="font-bold text-emerald-300">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">طول ساعة الليل الفلكية:</span> <span id="nightHourLength" class="font-bold text-indigo-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">موعد الشروق:</span> <span id="sunriseDisplay" class="font-bold text-emerald-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">موعد الغروب:</span> <span id="sunsetDisplay" class="font-bold text-sky-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">طول ساعة النهار:</span> <span id="dayHourLength" class="font-bold text-emerald-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">طول ساعة الليل:</span> <span id="nightHourLength" class="font-bold text-indigo-300">-</span></div>
             </div>
         </section>
 
@@ -89,13 +89,13 @@
         <section class="glass-panel p-6 rounded-2xl flex flex-col items-center justify-center text-center space-y-4">
             <div class="space-y-1">
                 <span class="text-xs text-amber-400 font-semibold tracking-wider">الساعة العربية الحالية في النظام</span>
-                <div id="currentHourName" class="text-3xl md:text-4xl font-bold amiri-font text-amber-300 gold-glow">الشروق</div>
+                <div id="currentHourName" class="text-3xl md:text-4xl font-bold amiri-font text-amber-300 gold-glow">الشفق</div>
             </div>
 
             <div class="bg-gray-900/90 border border-amber-500/30 px-6 py-4 rounded-xl w-full space-y-2">
-                <div id="currentHourNumber" class="text-xl font-bold text-white">الساعة 1</div>
+                <div id="currentHourNumber" class="text-xl font-bold text-white">الساعة 13</div>
                 <div id="currentDetailedTime" class="text-sm text-amber-200 font-mono">الدقيقة الفلكية 00 | الثانية 00</div>
-                <div id="periodIndicator" class="text-xs px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full inline-block">فترة النهار العربي</div>
+                <div id="periodIndicator" class="text-xs px-3 py-1 bg-indigo-500/20 text-indigo-300 rounded-full inline-block">فترة الليل العربي النقي</div>
             </div>
 
             <!-- أوقات الصلاة والمناسبات -->
@@ -118,7 +118,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs" id="hoursGrid"></div>
     </footer>
 
-    <!-- خوارزميات النظام الفلكي النقي -->
+    <!-- خوارزميات النظام الفلكي النقي المتطابق مع الليل والنهار الفعلي -->
     <script>
         const arabicHours = [
             { id: 1, name: "الشروق", type: "day" }, { id: 2, name: "البكور", type: "day" },
@@ -136,7 +136,7 @@
         ];
 
         let isSimulation = false;
-        let virtualDayProgress = 0; // تقدم اليوم من 0 إلى 1 بالكامل حسب النظام النقي
+        let virtualTime = new Date();
         let lastTriggeredEvent = "";
 
         function playAudioDirect(audioId) {
@@ -162,10 +162,7 @@
             document.getElementById('simBtn').className = `py-2 px-3 rounded-xl text-xs font-bold transition ${isSimulation ? 'bg-amber-500 text-gray-950' : 'bg-gray-800 text-gray-300'}`;
         }
 
-        function setPresetDate(mmdd) {
-            // يمكن استخدامها لاحقاً لضبط المحاكاة الفصلية
-        }
-
+        function setPresetDate(mmdd) {}
         function updateSimulationDate() {}
 
         function getAstronomicalParameters(date) {
@@ -174,14 +171,26 @@
             const angle = (2 * Math.PI * (dayOfYear - 80)) / 365;
             const seasonalFactor = Math.cos(angle); 
             
-            let dayHoursCount = 12 + 2 * seasonalFactor; // نسبة ساعات النهار في نظامك
+            let dayHoursCount = 12 + 2 * seasonalFactor; 
             let nightHoursCount = 24 - dayHoursCount;
+
+            let sunriseDecimal = 6 - (seasonalFactor * 0.8);
+            let sunsetDecimal = sunriseDecimal + dayHoursCount;
+
+            let formatTime = (dec) => {
+                let h = Math.floor(dec) % 24;
+                let m = Math.floor((dec - Math.floor(dec)) * 60);
+                if (h < 0) h += 24;
+                return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+            };
 
             return {
                 dayHours: dayHoursCount,
                 nightHours: nightHoursCount,
-                dayHoursStr: dayHoursCount.toFixed(1),
-                nightHoursStr: nightHoursCount.toFixed(1),
+                sunriseDecimal: sunriseDecimal,
+                sunsetDecimal: sunsetDecimal,
+                sunriseStr: formatTime(sunriseDecimal),
+                sunsetStr: formatTime(sunsetDecimal),
                 dayHourMinutes: ((dayHoursCount / 12) * 60).toFixed(1),
                 nightHourMinutes: ((nightHoursCount / 12) * 60).toFixed(1),
                 seasonName: seasonalFactor > 0.5 ? "ذروة الصيف" : (seasonalFactor < -0.5 ? "ذروة الشتاء" : "اعتدال انتقالي")
@@ -189,51 +198,57 @@
         }
 
         function updatePureSystemClock() {
-            let now = new Date();
+            let now = isSimulation ? virtualTime : new Date();
+            if (isSimulation) {
+                const speed = parseFloat(document.getElementById('simSpeed').value) || 1;
+                virtualTime = new Date(virtualTime.getTime() + (1000 * speed * 0.1));
+            }
+
             const astro = getAstronomicalParameters(now);
-            
             document.getElementById('seasonName').innerText = astro.seasonName;
-            document.getElementById('dayHoursVal').innerText = `${astro.dayHoursStr} ساعة فلكية`;
-            document.getElementById('nightHoursVal').innerText = `${astro.nightHoursStr} ساعة فلكية`;
+            document.getElementById('sunriseDisplay').innerText = astro.sunriseStr;
+            document.getElementById('sunsetDisplay').innerText = astro.sunsetStr;
             document.getElementById('dayHourLength').innerText = `${astro.dayHourMinutes} دقيقة`;
             document.getElementById('nightHourLength').innerText = `${astro.nightHourMinutes} دقيقة`;
 
-            // في الوضع الفعلي أو المحاكاة، نحسب دورة الـ 24 ساعة النقية الخاصة بك
-            if (isSimulation) {
-                const speed = parseFloat(document.getElementById('simSpeed').value) || 1;
-                virtualDayProgress += (0.001 * speed);
-                if (virtualDayProgress >= 1) virtualDayProgress = 0;
-            } else {
-                // ربط تدفق اليوم الفلكي النقي بمرور التوقيت الحقيقي اليومي بدءاً من لحظة الشروق الوهمية أو الافتراضية لنظامك
-                let totalSecsToday = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-                virtualDayProgress = (totalSecsToday % 86400) / 86400;
-            }
-
-            // توزيع التقدم الكلي (من 0 إلى 1) على ساعات النهار والليل بنظامك النقي
-            let totalDayFraction = astro.dayHours / 24; // نسبة النهار من الدورة الكاملة
+            let currentDecimalTime = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
+            
             let curIndex = 0, prog = 0, isDaytime = true;
+            let sunriseSecs = astro.sunriseDecimal * 3600;
+            let sunsetSecs = astro.sunsetDecimal * 3600;
+            let currentSecs = currentDecimalTime * 3600;
 
-            if (virtualDayProgress < totalDayFraction) {
+            let dayDurationSecs = (astro.dayHours) * 3600;
+            let nightDurationSecs = (astro.nightHours) * 3600;
+
+            // التحقق الدقيق هل نحن في النهار أم في الليل بناءً على الشروق والغروب الفعلي
+            let timeSinceSunrise = currentSecs - sunriseSecs;
+            if (timeSinceSunrise < 0) timeSinceSunrise += 86400;
+
+            if (timeSinceSunrise < dayDurationSecs) {
+                // نحن في النهار (من الساعة 1 إلى 12)
                 isDaytime = true;
-                let normalizedDayProg = virtualDayProgress / totalDayFraction; // من 0 إلى 1 داخل النهار
-                curIndex = Math.floor(normalizedDayProg * 12);
-                if (curIndex >= 12) curIndex = 11;
-                prog = (normalizedDayProg * 12) - curIndex;
+                let secPerDayHour = dayDurationSecs / 12;
+                curIndex = Math.floor(timeSinceSunrise / secPerDayHour);
+                if (curIndex > 11) curIndex = 11;
+                prog = (timeSinceSunrise % secPerDayHour) / secPerDayHour;
             } else {
+                // نحن في الليل (من الساعة 13 إلى 24)
                 isDaytime = false;
-                let normalizedNightProg = (virtualDayProgress - totalDayFraction) / (1 - totalDayFraction); // من 0 إلى 1 داخل الليل
-                curIndex = 12 + Math.floor(normalizedNightProg * 12);
-                if (curIndex >= 24) curIndex = 23;
-                prog = (normalizedNightProg * 12) - (curIndex - 12);
+                let timeSinceSunset = timeSinceSunrise - dayDurationSecs;
+                let secPerNightHour = nightDurationSecs / 12;
+                curIndex = 12 + Math.floor(timeSinceSunset / secPerNightHour);
+                if (curIndex > 23) curIndex = 23;
+                prog = (timeSinceSunset % secPerNightHour) / secPerNightHour;
             }
 
             const activeH = arabicHours[curIndex];
             let currentMinute = Math.floor(prog * 60);
             let currentSecond = Math.floor((prog * 3600) % 60);
 
-            // التزامن التلقائي للصوت في النظام النقي
+            // التزامن التلقائي للصوت
             let eventKey = `${activeH.id}-${currentMinute}`;
-            if (currentSecond < 2 && lastTriggeredEvent !== eventKey) {
+            if (now.getSeconds() < 2 && lastTriggeredEvent !== eventKey) {
                 if (activeH.audio && activeH.id !== 22 && currentMinute === 0) {
                     lastTriggeredEvent = eventKey;
                     playAudioDirect(activeH.audio);
@@ -255,13 +270,14 @@
             document.getElementById('currentHourNumber').innerText = `الساعة العربية ${activeH.id} (${activeH.name})`;
             document.getElementById('currentDetailedTime').innerText = `الدقيقة الفلكية ${currentMinute} | الثانية ${currentSecond}`;
             document.getElementById('periodIndicator').innerText = isDaytime ? "فترة النهار العربي النقي" : "فترة الليل العربي النقي";
+            document.getElementById('periodIndicator').className = isDaytime ? "text-xs px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full inline-block" : "text-xs px-3 py-1 bg-indigo-500/20 text-indigo-300 rounded-full inline-block";
 
-            document.querySelectorAll('[id^="hour-card-"]').forEach(el => el.classList.remove('ring-2', 'ring-amber-400', 'bg-amber-900/60'));
+            document.querySelectorAll('[id^="hour-card-"]').forEach(el => el.classList.remove('ring-2', 'ring-amber-400', 'bg-amber-900/60', 'bg-indigo-900/60'));
             const activeCard = document.getElementById(`hour-card-${activeH.id}`);
-            if (activeCard) activeCard.classList.add('ring-2', 'ring-amber-400', 'bg-amber-900/60');
+            if (activeCard) activeCard.classList.add('ring-2', 'ring-amber-400', isDaytime ? 'bg-amber-900/60' : 'bg-indigo-900/60');
         }
 
-        setInterval(updatePureSystemClock, 200);
+        setInterval(updatePureSystemClock, 1000);
         updatePureSystemClock();
     </script>
 </body>
