@@ -78,8 +78,8 @@
             <!-- معطيات النظام النقي -->
             <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800 space-y-1.5 text-xs">
                 <div class="flex justify-between"><span class="text-gray-400">الحالة الفصلية:</span> <span id="seasonName" class="font-bold text-amber-400">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">موعد الشروق:</span> <span id="sunriseDisplay" class="font-bold text-emerald-300">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">موعد الغروب:</span> <span id="sunsetDisplay" class="font-bold text-sky-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">نقطة انطلاق الشروق:</span> <span id="sunriseDisplay" class="font-bold text-emerald-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">نقطة انتقال الغروب:</span> <span id="sunsetDisplay" class="font-bold text-sky-300">-</span></div>
                 <div class="flex justify-between"><span class="text-gray-400">طول ساعة النهار:</span> <span id="dayHourLength" class="font-bold text-emerald-300">-</span></div>
                 <div class="flex justify-between"><span class="text-gray-400">طول ساعة الليل:</span> <span id="nightHourLength" class="font-bold text-indigo-300">-</span></div>
             </div>
@@ -89,13 +89,13 @@
         <section class="glass-panel p-6 rounded-2xl flex flex-col items-center justify-center text-center space-y-4">
             <div class="space-y-1">
                 <span class="text-xs text-amber-400 font-semibold tracking-wider">الساعة العربية الحالية في النظام</span>
-                <div id="currentHourName" class="text-3xl md:text-4xl font-bold amiri-font text-amber-300 gold-glow">الشفق</div>
+                <div id="currentHourName" class="text-3xl md:text-4xl font-bold amiri-font text-amber-300 gold-glow">الشروق</div>
             </div>
 
             <div class="bg-gray-900/90 border border-amber-500/30 px-6 py-4 rounded-xl w-full space-y-2">
-                <div id="currentHourNumber" class="text-xl font-bold text-white">الساعة 13</div>
+                <div id="currentHourNumber" class="text-xl font-bold text-white">الساعة 1</div>
                 <div id="currentDetailedTime" class="text-sm text-amber-200 font-mono">الدقيقة الفلكية 00 | الثانية 00</div>
-                <div id="periodIndicator" class="text-xs px-3 py-1 bg-indigo-500/20 text-indigo-300 rounded-full inline-block">فترة الليل العربي النقي</div>
+                <div id="periodIndicator" class="text-xs px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full inline-block">فترة النهار العربي النقي</div>
             </div>
 
             <!-- أوقات الصلاة والمناسبات -->
@@ -118,7 +118,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs" id="hoursGrid"></div>
     </footer>
 
-    <!-- خوارزميات النظام الفلكي النقي المتطابق مع الليل والنهار الفعلي -->
+    <!-- خوارزميات النظام الفلكي النقي المستقل -->
     <script>
         const arabicHours = [
             { id: 1, name: "الشروق", type: "day" }, { id: 2, name: "البكور", type: "day" },
@@ -174,13 +174,12 @@
             let dayHoursCount = 12 + 2 * seasonalFactor; 
             let nightHoursCount = 24 - dayHoursCount;
 
-            let sunriseDecimal = 6 - (seasonalFactor * 0.8);
+            let sunriseDecimal = 6.63; // 06:38 كمبدأ تزامن أولي لمعرفة الشروق، ثم يستقل النظام بعدها
             let sunsetDecimal = sunriseDecimal + dayHoursCount;
 
             let formatTime = (dec) => {
                 let h = Math.floor(dec) % 24;
                 let m = Math.floor((dec - Math.floor(dec)) * 60);
-                if (h < 0) h += 24;
                 return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
             };
 
@@ -206,8 +205,8 @@
 
             const astro = getAstronomicalParameters(now);
             document.getElementById('seasonName').innerText = astro.seasonName;
-            document.getElementById('sunriseDisplay').innerText = astro.sunriseStr;
-            document.getElementById('sunsetDisplay').innerText = astro.sunsetStr;
+            document.getElementById('sunriseDisplay').innerText = astro.sunriseStr + " (نقطة البداية الفلكية)";
+            document.getElementById('sunsetDisplay').innerText = astro.sunsetStr + " (نقطة الانتقال لليل)";
             document.getElementById('dayHourLength').innerText = `${astro.dayHourMinutes} دقيقة`;
             document.getElementById('nightHourLength').innerText = `${astro.nightHourMinutes} دقيقة`;
 
@@ -215,25 +214,21 @@
             
             let curIndex = 0, prog = 0, isDaytime = true;
             let sunriseSecs = astro.sunriseDecimal * 3600;
-            let sunsetSecs = astro.sunsetDecimal * 3600;
             let currentSecs = currentDecimalTime * 3600;
 
             let dayDurationSecs = (astro.dayHours) * 3600;
             let nightDurationSecs = (astro.nightHours) * 3600;
 
-            // التحقق الدقيق هل نحن في النهار أم في الليل بناءً على الشروق والغروب الفعلي
             let timeSinceSunrise = currentSecs - sunriseSecs;
             if (timeSinceSunrise < 0) timeSinceSunrise += 86400;
 
             if (timeSinceSunrise < dayDurationSecs) {
-                // نحن في النهار (من الساعة 1 إلى 12)
                 isDaytime = true;
                 let secPerDayHour = dayDurationSecs / 12;
                 curIndex = Math.floor(timeSinceSunrise / secPerDayHour);
                 if (curIndex > 11) curIndex = 11;
                 prog = (timeSinceSunrise % secPerDayHour) / secPerDayHour;
             } else {
-                // نحن في الليل (من الساعة 13 إلى 24)
                 isDaytime = false;
                 let timeSinceSunset = timeSinceSunrise - dayDurationSecs;
                 let secPerNightHour = nightDurationSecs / 12;
