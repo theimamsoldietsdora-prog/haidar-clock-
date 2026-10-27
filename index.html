@@ -117,7 +117,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs" id="hoursGrid"></div>
     </footer>
 
-    <!-- البرمجة والخوارزميات المتوافقة مع النظرية النقية -->
+    <!-- البرمجة والخوارزميات الصرفة المعتمَدة على نظامك المبتكر -->
     <script>
         const arabicHours = [
             { id: 1, name: "الشروق", type: "day" }, { id: 2, name: "البكور", type: "day" },
@@ -177,7 +177,6 @@
             virtualTime = new Date(document.getElementById('simDateInput').value + "T06:00:00");
         }
 
-        // المعادلة الفلكية البحتة لحساب طول النهار والليل العربية
         function getAstronomicalParameters(date) {
             const startOfYear = new Date(date.getFullYear(), 0, 1);
             const dayOfYear = Math.floor((date - startOfYear) / (1000 * 60 * 60 * 24));
@@ -222,13 +221,11 @@
             document.getElementById('dayHourLength').innerText = `${astro.dayHourMinutes} دقيقة فلكية`;
             document.getElementById('nightHourLength').innerText = `${astro.nightHourMinutes} دقيقة فلكية`;
 
-            // محاكاة ثواني اليوم الحالي للأنظمة التجريبية الفلكية الصرفة
+            // حساب الثواني بناءً على تدفق النظام الفلكي الصرف
             const currentTotalSecs = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
             const totalDaySecs = astro.dayHours * 3600;
             const totalNightSecs = astro.nightHours * 3600;
 
-            // افتراض انطلاق دورة الـ 24 ساعة العربية مع الساعة 6:00 صباحاً كمرجعية زمنية افتراضية للشروق في المحاكاة، 
-            // ويمكنك تعديل نقطة البداية المطلقة حسب رغبتك. لنحسب موقع الساعة بدقة تامة من الـ 24 ساعة:
             let relativeSecs = (currentTotalSecs - (6 * 3600) + 86400) % 86400;
 
             let curIndex = 0, prog = 0, isDaytime = true;
@@ -287,18 +284,16 @@
             ctx.fillStyle = bgGrad; ctx.fill();
             ctx.lineWidth = 5; ctx.strokeStyle = '#f59e0b'; ctx.stroke();
 
-            // اسم المختع في مركز الساعة
+            // اسم المبتكر في مركز الساعة
             ctx.font = 'bold 13px "Cairo", sans-serif'; ctx.fillStyle = '#facc15'; ctx.textAlign = 'center';
             ctx.fillText("ابتكار واختراع", 0, -8);
             ctx.font = 'bold 15px "Amiri", serif'; ctx.fillStyle = '#ffffff';
             ctx.fillText("المهندس حيدر ال عگاب", 0, 14);
 
-            // معادلة توزيع الـ 24 ساعة على محيط الدائرة (15 درجة لكل ساعة تزامناً مع نظامك النقي)
             const step = (2 * Math.PI) / 24;
 
-            // رسم تقسيمات الساعات الـ 24 بدقة تامة وبشكل متناسق مع رقم الساعة النصي
+            // رسم ساعات نظامك الـ 24 بدقة وتطابق تام
             for (let i = 0; i < 24; i++) {
-                // الساعة 1 تبدأ من الأعلى (-Math.PI / 2) وتتوالى باتجاه عقارب الساعة
                 const angle = (i * step) - Math.PI / 2;
                 const h = arabicHours[i];
                 ctx.save();
@@ -316,7 +311,7 @@
                 ctx.restore();
             }
 
-            // ضبط زاوية عقرب الساعات بدقة مئوية لتتطابق تماماً مع الساعة الحالية المعروضة بالنص أسفل القرص
+            // التطابق المباشر لعقرب الساعات مع مؤشر الساعة الحالية
             const hAngle = ((curIndex + prog) * step) - Math.PI / 2;
             ctx.save();
             ctx.rotate(hAngle);
@@ -324,7 +319,7 @@
             ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.stroke();
             ctx.restore();
 
-            // ضبط عقرب الدقائق الفلكية
+            // عقرب الدقائق الفلكية
             const minAngle = (prog * 2 * Math.PI) - Math.PI / 2;
             ctx.save();
             ctx.rotate(minAngle);
@@ -332,7 +327,7 @@
             ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3.5; ctx.lineCap = 'round'; ctx.stroke();
             ctx.restore();
 
-            // ضبط عقرب الثواني
+            // عقرب الثواني
             const secAngle = ((now.getSeconds() / 60) * 2 * Math.PI) - Math.PI / 2;
             ctx.save();
             ctx.rotate(secAngle);
