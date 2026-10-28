@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الساعة الفلكية النقية - المهندس حيدر ال عگاب</title>
+    <title>الساعة الفلكية بنظرية المعين والفاصل العمودي - المهندس حيدر ال عگاب</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap');
@@ -38,12 +38,12 @@
 
     <!-- رأس الصفحة -->
     <header class="text-center max-w-4xl mx-auto mb-4 space-y-2">
-        <h1 class="text-3xl md:text-5xl font-bold amiri-font text-amber-400 gold-glow mb-1">الساعة الفلكية النقية</h1>
-        <p class="text-xs md:text-sm text-gray-300">نموذج تزايد وتناقص الساعات حسب مسار الفصول والأوج والحضيض</p>
+        <h1 class="text-3xl md:text-5xl font-bold amiri-font text-amber-400 gold-glow mb-1">الساعة الفلكية لنظرية المعين والفاصل العمودي</h1>
+        <p class="text-xs md:text-sm text-gray-300">نموذج ثبات الأرض، دوران الشمس حول محور الليل العمودي، والدورات اليومية المعينية</p>
         <div class="text-xs text-amber-300 font-semibold tracking-wider">ابتكار ونظرية: المهندس حيدر ال عگاب</div>
         
         <div class="pt-2 flex flex-wrap justify-center gap-2">
-            <button id="audioUnlockBtn" onclick="unlockAudioContext(); playAudioDirect('adhanAudio')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">🔊 تفعيل الصوت وتجربة الأذان</button>
+            <button id="audioUnlockBtn" onclick="unlockAudioContext(); playAudioDirect('adhanAudio')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">🔊 تفعيل الصوت والأذان</button>
             <button onclick="unlockAudioContext(); playAudioDirect('quranAudio')" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📖 تجربة سورة النصر</button>
             <button onclick="unlockAudioContext(); playAudioDirect('istighfarAudio')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow-lg transition">📿 تجربة الاستغفار</button>
         </div>
@@ -53,9 +53,9 @@
     <!-- المحتوى الرئيسي -->
     <main class="max-w-4xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         
-        <!-- لوحة التحكم وتحديد الفصول -->
+        <!-- لوحة التحكم وتحديد الدورات المعينية -->
         <section class="glass-panel p-4 md:p-5 rounded-2xl space-y-4">
-            <h2 class="text-lg font-bold text-amber-300 border-b border-gray-700 pb-2">محاكي المسار الفصلي للشمس</h2>
+            <h2 class="text-lg font-bold text-amber-300 border-b border-gray-700 pb-2">محاكي الفاصل العمودي والدورات المعينية</h2>
             
             <div class="grid grid-cols-2 gap-2">
                 <button id="realtimeBtn" onclick="setMode('real')" class="py-2 px-3 rounded-xl text-xs font-bold bg-amber-500 text-gray-950 transition">الوضع الفعلي</button>
@@ -65,10 +65,10 @@
             <div id="simControls" class="space-y-3 opacity-50 pointer-events-none transition-all">
                 <input type="date" id="simDateInput" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500" value="2026-10-28" oninput="updateSimulationDate()">
                 <div class="grid grid-cols-2 gap-1.5">
-                    <button onclick="setPresetDate('09-21')" class="bg-gray-800 hover:bg-gray-700 text-[11px] py-1 px-2 rounded-lg text-amber-200">الاعتدال الخريفي (21/9)</button>
-                    <button onclick="setPresetDate('12-21')" class="bg-gray-800 hover:bg-gray-700 text-[11px] py-1 px-2 rounded-lg text-amber-200">ذروة الشتاء - الأوج (21/12)</button>
-                    <button onclick="setPresetDate('03-21')" class="bg-gray-800 hover:bg-gray-700 text-[11px] py-1 px-2 rounded-lg text-amber-200">الاعتدال الربيعي (21/3)</button>
-                    <button onclick="setPresetDate('06-21')" class="bg-gray-800 hover:bg-gray-700 text-[11px] py-1 px-2 rounded-lg text-amber-200">ذروة الصيف - الحضيض (21/6)</button>
+                    <button onclick="setPresetDate('12-21')" class="bg-gray-800 hover:bg-gray-700 text-[11px] py-1 px-2 rounded-lg text-amber-200">ذروة الشتاء (الأوج - الدورة 1)</button>
+                    <button onclick="setPresetDate('03-21')" class="bg-gray-800 hover:bg-gray-700 text-[11px] py-1 px-2 rounded-lg text-amber-200">الاعتدال الربيعي</button>
+                    <button onclick="setPresetDate('06-21')" class="bg-gray-800 hover:bg-gray-700 text-[11px] py-1 px-2 rounded-lg text-amber-200">ذروة الصيف (الحضيض)</button>
+                    <button onclick="setPresetDate('09-21')" class="bg-gray-800 hover:bg-gray-700 text-[11px] py-1 px-2 rounded-lg text-amber-200">الاعتدال الخريفي</button>
                 </div>
                 <select id="simSpeed" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none">
                     <option value="1">1x (عادي)</option>
@@ -77,20 +77,20 @@
                 </select>
             </div>
 
-            <!-- معطيات المعين الفلكي الناتجة بالمعادلة المصححة -->
+            <!-- معطيات المعين الفلكي والفاصل العمودي الناتجة بالمعادلة المضبطة -->
             <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800 space-y-1.5 text-xs">
-                <div class="flex justify-between"><span class="text-gray-400">الحالة الفصلية للشمس:</span> <span id="sunPositionType" class="font-bold text-amber-400">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">رقم الدورة اليومية بالفصل:</span> <span id="cycleNumber" class="font-bold text-sky-300">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">موقع الشمس وحالة الفاصل:</span> <span id="sunPositionType" class="font-bold text-amber-400">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">رقم الدورة اليومية المعينية:</span> <span id="cycleNumber" class="font-bold text-sky-300">-</span></div>
                 <div class="flex justify-between"><span class="text-gray-400">طول ساعة النهار العربية:</span> <span id="dayHourLength" class="font-bold text-emerald-300">-</span></div>
                 <div class="flex justify-between"><span class="text-gray-400">طول ساعة الليل العربية:</span> <span id="nightHourLength" class="font-bold text-indigo-300">-</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">الفارق الزمني الجغرافي:</span> <span id="geoOffset" class="font-bold text-amber-200">-</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">فارق المنظور والمناطق الزمنية:</span> <span id="geoOffset" class="font-bold text-amber-200">-</span></div>
             </div>
         </section>
 
         <!-- الشاشة الرقمية المركزية -->
         <section class="glass-panel p-6 rounded-2xl flex flex-col items-center justify-center text-center space-y-4">
             <div class="space-y-1">
-                <span class="text-xs text-amber-400 font-semibold tracking-wider">الساعة العربية الحالية في النظام</span>
+                <span class="text-xs text-amber-400 font-semibold tracking-wider">الساعة العربية الحالية في المعين</span>
                 <div id="currentHourName" class="text-3xl md:text-4xl font-bold amiri-font text-amber-300 gold-glow">الشروق</div>
             </div>
 
@@ -102,7 +102,7 @@
 
             <!-- أوقات العبادات والمقامات الزمنية -->
             <div class="w-full bg-amber-950/20 p-3 rounded-xl border border-amber-500/30 text-right space-y-1.5 text-xs">
-                <div class="font-bold text-amber-300 border-b border-amber-500/20 pb-1 mb-1 text-center">أوقات العبادات والتنبيهات الفلكية</div>
+                <div class="font-bold text-amber-300 border-b border-amber-500/20 pb-1 mb-1 text-center">أوقات العبادات في نظرية المعين والفاصل العمودي</div>
                 <div class="flex justify-between"><span class="text-gray-300">🍽️ الإفطار وبداية الليل:</span> <span class="font-bold text-amber-300">ساعة 13 (00:00)</span></div>
                 <div class="flex justify-between"><span class="text-gray-300">🌙 صلاة غسق الليل (العتمة):</span> <span class="font-bold text-indigo-300">ساعة 14 (00:00)</span></div>
                 <div class="flex justify-between"><span class="text-gray-300">🌌 صلاة الليل (منتصف الليل):</span> <span class="font-bold text-purple-300">ساعة 19 (00:00)</span></div>
@@ -122,7 +122,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs" id="hoursGrid"></div>
     </footer>
 
-    <!-- خوارزميات حركة الشمس والفصول الدقيقة -->
+    <!-- خوارزميات نظريتك الكاملة (الدورات المعينية والفاصل العمودي) -->
     <script>
         const arabicHours = [
             { id: 1, name: "الشروق", type: "day" }, { id: 2, name: "البكور", type: "day" },
@@ -154,7 +154,7 @@
                 if (a) { a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(() => {}); }
             });
             isAudioUnlocked = true;
-            document.getElementById('audioStatus').innerText = "✓ النظام الصوتي يعمل بانسجام مع المسار الفلكي";
+            document.getElementById('audioStatus').innerText = "✓ النظام الصوتي يعمل بانسجام مع دورات المعين والفاصل العمودي";
         }
 
         function playAudioDirect(audioId) {
@@ -193,36 +193,42 @@
             virtualTime = new Date(document.getElementById('simDateInput').value + "T06:00:00");
         }
 
-        // الخوارزمية الدقيقة الشاملة لنظريتك في تزايد وتناقص الساعات حسب الفصول
+        // المعادلة الخوارزمية المستندة حصرياً لمرجع ذروة الشتاء (21 ديسمبر) والدورات المعينية والفاصل العمودي
         function calculateDiamondAstroModel(date) {
-            const startOfYear = new Date(date.getFullYear(), 0, 1);
-            const dayOfYear = Math.floor((date - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
+            const year = date.getFullYear();
+            // مرجع البداية المطلق لنظريتك: ذروة الشتاء (الأوج العلوي) في 21 ديسمبر
+            const winterPeak = new Date(year, 11, 21);
+            if (date < winterPeak) {
+                winterPeak.setFullYear(year - 1);
+            }
             
-            // حساب الزاوية المرجعية المرتكزة على الاعتدال الربيعي (اليوم 80 / 21 مارس)
-            // بحيث:
-            // في 21/3 (الاعتدال الربيعي) -> sin = 0 -> النهار 60 دقيقة والليل 60 دقيقة
-            // في 21/6 (ذروة الصيف) -> sin = 1 -> النهار في أعلى طول (70 دقيقة) والليل أقصر (50 دقيقة)
-            // في 21/9 (الاعتدال الخريفي) -> sin = 0 -> النهار 60 دقيقة والليل 60 دقيقة
-            // في 21/12 (ذروة الشتاء) -> sin = -1 -> النهار في أدنى طول (50 دقيقة) والليل أطول (70 دقيقة)
-            const angle = (2 * Math.PI * (dayOfYear - 80)) / 365.2425;
-            const seasonalFactor = Math.sin(angle); 
+            // حساب رقم الدورة اليومية تصاعدياً وتنازلياً بدءاً من مرجع 21/12
+            const diffTime = date - winterPeak;
+            let cycleDayNumber = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            if (cycleDayNumber > 365) cycleDayNumber = cycleDayNumber % 365;
+
+            // زاوية الصعود والنزول في المعين الفلكي نسبة لمرجع 21 ديسمبر
+            const angle = (2 * Math.PI * cycleDayNumber) / 365.2425;
+            // باستخدام Cosine بحيث:
+            // عند 21/12 (الدورة 1) -> Cos = 1 (أقصى الأوج: أدنى نهار وأطول ليل)
+            // عند 21/3 (الاعتدال الربيعي) -> Cos = 0 (تساوي النهار والليل)
+            // عند 21/6 (الحضيض) -> Cos = -1 (أقصى الحضيض: أطول نهار وأدنى ليل)
+            // عند 21/9 (الاعتدال الخريفي) -> Cos = 0 (تساوي النهار والليل)
+            const verticalFactor = Math.cos(angle); 
             
-            // إجمالي دقائق النهار والليل
-            let totalDayMinutes = 720 + (seasonalFactor * 120); // بين 600 دقيقة (شتاء) و840 دقيقة (صيف)
+            let totalDayMinutes = 720 - (verticalFactor * 120); // يتراوح بين 600 دقيقة (شتاء) و840 دقيقة (صيف)
             let totalNightMinutes = 1440 - totalDayMinutes;
 
             let dayHourMinutes = totalDayMinutes / 12;
             let nightHourMinutes = totalNightMinutes / 12;
 
-            let cycleNum = Math.floor(dayOfYear % 91) + 1;
-            
             let sunPosName = "";
-            if (Math.abs(seasonalFactor) < 0.1) {
-                sunPosName = "الاعتدال الفلكي (تساوي النهار والليل)";
-            } else if (seasonalFactor < 0) {
-                sunPosName = seasonalFactor < -0.8 ? "ذروة الشتاء (الأوج - النهار أقصر والليل أطول)" : "مرحلة الخريف (تناقص النهار وتزايد الليل)";
+            if (Math.abs(verticalFactor) > 0.8) {
+                sunPosName = verticalFactor > 0 ? "ذروة الشتاء - الأوج (الفاصل العمودي يحجب المدار الأقصى)" : "ذروة الصيف - الحضيض (اقتراب المدار ونور تام)";
+            } else if (Math.abs(verticalFactor) < 0.1) {
+                sunPosName = "نقطة الاعتدال (تساوي النهار والليل عبر الفاصل العمودي)";
             } else {
-                sunPosName = seasonalFactor > 0.8 ? "ذروة الصيف (الحضيض - النهار أطول والليل أقصر)" : "مرحلة الربيع (تزايد النهار وتناقص الليل)";
+                sunPosName = verticalFactor > 0 ? "مرحلة الانحدار الصاعد/النازل نحو الشتاء" : "مرحلة الصعود نحو الحضيض والصيف";
             }
 
             return {
@@ -230,10 +236,10 @@
                 totalNightMinutes: totalNightMinutes.toFixed(1),
                 dayHourMinutes: dayHourMinutes.toFixed(1),
                 nightHourMinutes: nightHourMinutes.toFixed(1),
-                cycleNum: cycleNum,
+                cycleNum: cycleDayNumber,
                 sunPosName: sunPosName,
-                sunriseDecimal: 6.63 - (seasonalFactor * 0.4),
-                geoOffset: "3.5 ساعات (فارق المنظور الجغرافي)"
+                sunriseDecimal: 6.63 + (verticalFactor * 0.4),
+                geoOffset: "3.5 ساعات (فارق المنظور حول فاصل الليل العمودي)"
             };
         }
 
@@ -246,7 +252,7 @@
 
             const model = calculateDiamondAstroModel(now);
             document.getElementById('sunPositionType').innerText = model.sunPosName;
-            document.getElementById('cycleNumber').innerText = `الدورة اليومية رقم ${model.cycleNum}`;
+            document.getElementById('cycleNumber').innerText = `الدورة المعينية رقم ${model.cycleNum}`;
             document.getElementById('dayHourLength').innerText = `${model.dayHourMinutes} دقيقة`;
             document.getElementById('nightHourLength').innerText = `${model.nightHourMinutes} دقيقة`;
             document.getElementById('geoOffset').innerText = model.geoOffset;
@@ -304,7 +310,7 @@
             document.getElementById('currentHourName').innerText = activeH.name + (activeH.prayer ? ` (${activeH.prayer})` : (activeH.special ? ` (${activeH.special})` : ''));
             document.getElementById('currentHourNumber').innerText = `الساعة العربية ${activeH.id} (${activeH.name})`;
             document.getElementById('currentDetailedTime').innerText = `الدقيقة الفلكية ${String(currentMinute).padStart(2, '0')} | الثانية الفلكية ${String(currentSecond).padStart(2, '0')}`;
-            document.getElementById('periodIndicator').innerText = isDaytime ? "فترة النهار العربي النقي" : "فترة الليل العربي النقي";
+            document.getElementById('periodIndicator').innerText = isDaytime ? "فترة النهار العربي النقي" : "فترة الليل العربي النقي عبر الفاصل";
             document.getElementById('periodIndicator').className = isDaytime ? "text-xs px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full inline-block" : "text-xs px-3 py-1 bg-indigo-500/20 text-indigo-300 rounded-full inline-block";
 
             document.querySelectorAll('[id^="hour-card-"]').forEach(el => el.classList.remove('ring-2', 'ring-amber-400', 'bg-amber-900/60', 'bg-indigo-900/60'));
